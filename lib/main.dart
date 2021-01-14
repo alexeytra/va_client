@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Виртуальный ассистент',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.green,
+        primaryColor: Colors.orange[300],
         accentColor: Color(0xFFFEF9EB),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
