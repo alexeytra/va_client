@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:va_client/message_model.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,12 +13,14 @@ class _HomeScreenState extends State<HomeScreen> {
   String _text = 'Press button';
   bool _visibilityFloatingAction = true;
   bool _visibilityInput = false;
-  List<String> _dialogue;
+  String _status;
+
+  List<Message> _dialogue;
 
   @override
   void initState() {
     super.initState();
-    _dialogue = ['Привет! Чем могу помочь'];
+    _dialogue = [Message(sender: 'VA', message: "Привет! Чем могу помочь?")];
     _speechToText = stt.SpeechToText();
   }
 
@@ -56,13 +59,57 @@ class _HomeScreenState extends State<HomeScreen> {
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
                   )),
-              child: Text(
-                _text,
-                style: TextStyle(fontSize: 30, color: Colors.black),
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30.0),
+                  topLeft: Radius.circular(30.0),
+                ),
+                child: ListView.builder(
+                    reverse: true,
+                    padding: EdgeInsets.only(
+                      top: 15.0,
+                    ),
+                    itemCount: _dialogue.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final bool isMe = _dialogue[index].sender == 'USER';
+                      // if (_listening) _dialogue.add(Message(sender: 'USER', message: _text));
+                      return _buildMessage(_dialogue[index].message, isMe);
+                    }),
               ),
             ),
           ),
           _buildInputQuestion()
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMessage(String message, bool isMe) {
+    return Container(
+      margin: isMe
+          ? EdgeInsets.only(top: 8.0, bottom: 8.0, left: 80.0)
+          : EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0),
+      padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+      decoration: BoxDecoration(
+          color: isMe ? Theme
+              .of(context)
+              .accentColor : Color(0xFFFFEFEE),
+          borderRadius: isMe
+              ? BorderRadius.only(
+              topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
+              : BorderRadius.only(
+              topRight: Radius.circular(15),
+              bottomRight: Radius.circular(15))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            message,
+            style: TextStyle(
+                color: Colors.blueGrey,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600),
+          ),
         ],
       ),
     );
@@ -130,16 +177,23 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_listening) {
       setState(() {
         _listening = false;
-        _speechToText.stop();
       });
+      _speechToText.stop();
       return;
     }
     if (!_listening) {
       bool available = await _speechToText.initialize(
-        onStatus: (val) => print('onStatus $val'),
+        onStatus: (val) {
+          if (val == 'notListening') {
+            setState(() {
+              _listening = false;
+            });
+          }
+        },
         onError: (val) => print('onError: $val'),
       );
 
+      print(available);
       if (available) {
         setState(() {
           _listening = true;
