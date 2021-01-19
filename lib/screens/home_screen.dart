@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/message_model.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,10 +13,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   stt.SpeechToText _speechToText;
   bool _listening = false;
-  String _text = 'Press button';
+  String _text = '';
   bool _visibilityFloatingAction = true;
   bool _visibilityInput = false;
-  String _status;
+  final textFieldController = TextEditingController();
+
+
 
   List<Message> _dialogue;
 
@@ -65,19 +70,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   topLeft: Radius.circular(30.0),
                 ),
                 child: ListView.builder(
-                    reverse: true,
                     padding: EdgeInsets.only(
                       top: 15.0,
                     ),
                     itemCount: _dialogue.length,
                     itemBuilder: (BuildContext context, int index) {
                       final bool isMe = _dialogue[index].sender == 'USER';
-                      // if (_listening) _dialogue.add(Message(sender: 'USER', message: _text));
                       return _buildMessage(_dialogue[index].message, isMe);
                     }),
               ),
             ),
           ),
+          Visibility(visible: _listening, child: _showUserQuestion()),
           _buildInputQuestion()
         ],
       ),
@@ -91,15 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
           : EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0),
       padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
       decoration: BoxDecoration(
-          color: isMe ? Theme
-              .of(context)
-              .accentColor : Color(0xFFFFEFEE),
+          color: isMe ? Theme.of(context).accentColor : Color(0xFFFFEFEE),
           borderRadius: isMe
               ? BorderRadius.only(
-              topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
+                  topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
               : BorderRadius.only(
-              topRight: Radius.circular(15),
-              bottomRight: Radius.circular(15))),
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -115,15 +117,31 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _buildInputQuestion() {
+  Widget _showUserQuestion() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Center(
+            child: Text(
+          _text,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        )),
+      ),
+    );
+  }
+
+  Widget _buildInputQuestion() {
     return Container(
       padding: EdgeInsets.only(bottom: 20.0, left: 15.0, right: 15),
       decoration: BoxDecoration(
-        boxShadow: [BoxShadow(
-            color: Colors.black54,
-            blurRadius: 5.0,
-            offset: Offset(0.0, 1)
-        ),],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black54, blurRadius: 5.0, offset: Offset(0.0, 1)),
+        ],
         color: Colors.white,
       ),
       height: 100.0,
@@ -144,11 +162,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Expanded(
                     child: TextField(
+                      controller: textFieldController,
                   decoration: InputDecoration(hintText: 'Введите вопрос'),
                 )),
                 IconButton(
                   icon: Icon(Icons.send),
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      _dialogue.add(Message(message: textFieldController.text, sender: 'USER'));
+                      textFieldController.text = '';
+                    });
+                  },
                   color: Theme.of(context).primaryColor,
                 )
               ],
@@ -177,8 +201,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_listening) {
       setState(() {
         _listening = false;
+        _dialogue.add(Message(message: _text, sender: 'USER'));
+        _text = '';
       });
       _speechToText.stop();
+      _getAnswer();
       return;
     }
     if (!_listening) {
@@ -208,9 +235,28 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         setState(() {
           _listening = false;
+          _dialogue.add(Message(message: _text, sender: 'USER'));
+          _text = '';
         });
         _speechToText.stop();
+        _getAnswer();
       }
+    }
+  }
+
+  void _getAnswer() async {
+    final http.Response response = await http.post('http://127.0.0.1:5000/va/api/v1/question/text',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+      'question': _dialogue.last.message,
+    }),);
+
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to get answer');
     }
   }
 }
