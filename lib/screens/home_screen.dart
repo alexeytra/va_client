@@ -172,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       _dialogue.add(Message(message: textFieldController.text, sender: 'USER'));
                       textFieldController.text = '';
                     });
+                    _getAnswer();
                   },
                   color: Theme.of(context).primaryColor,
                 )
@@ -214,13 +215,13 @@ class _HomeScreenState extends State<HomeScreen> {
           if (val == 'notListening') {
             setState(() {
               _listening = false;
+              _text = '';
             });
           }
         },
         onError: (val) => print('onError: $val'),
       );
 
-      print(available);
       if (available) {
         setState(() {
           _listening = true;
@@ -245,16 +246,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _getAnswer() async {
+    Map<String, dynamic> answer = Map();
+
+    var question = _dialogue.last.message.split("\s+");
     final http.Response response = await http.post('http://127.0.0.1:5000/va/api/v1/question/text',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-      'question': _dialogue.last.message,
+      'question': question.take(10).join(" "),
     }),);
 
     if (response.statusCode == 200) {
-      print(jsonDecode(response.body));
+      answer = jsonDecode(response.body);
+      setState(() {
+        _dialogue.add(Message(message: answer['answer'], sender: 'VA'));
+      });
     } else {
       throw Exception('Failed to get answer');
     }
