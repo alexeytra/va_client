@@ -27,6 +27,7 @@ dependencies:
   rxdart: ^0.24.0
   speech_to_text: ^3.1.0
   http: ^0.12.2
+  audioplayers: ^0.17.2
 
 
   # The following adds the Cupertino Icons font to your application.

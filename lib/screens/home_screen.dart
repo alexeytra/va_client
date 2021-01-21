@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/message_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:audioplayers/audioplayers.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,6 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _visibilityInput = false;
   final textFieldController = TextEditingController();
 
+  AudioPlayer _audioPlayer;
+  AudioCache _audioCache;
 
 
   List<Message> _dialogue;
@@ -27,6 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _dialogue = [Message(sender: 'VA', message: "Привет! Чем могу помочь?")];
     _speechToText = stt.SpeechToText();
+    _getAudioIntro();
+  }
+
+  _getAudioIntro() async {
+    _audioPlayer = AudioPlayer();
+    AudioPlayer.logEnabled = true;
+    _audioCache = AudioCache(fixedPlayer: _audioPlayer);
+    _audioCache.load('intro.mp3');
+    _audioCache.play('intro.mp3');
+
   }
 
   @override
@@ -262,8 +276,15 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _dialogue.add(Message(message: answer['answer'], sender: 'VA'));
       });
+      _getAudioAnswer(answer['audio_answer']);
     } else {
+      _dialogue.add(Message(message: 'Нет связи с мозгом 😁😁😁', sender: 'VA'));
       throw Exception('Failed to get answer');
     }
+  }
+
+  void _getAudioAnswer(String url) async {
+    AudioPlayer player = AudioPlayer();
+    player.play(url);
   }
 }
