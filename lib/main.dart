@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.orange[300],
-        accentColor: Color(0xFFFEF9EB),
+        accentColor: Colors.orange[100],
+        backgroundColor: Colors.red[50],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen()

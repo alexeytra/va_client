@@ -19,10 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _visibilityFloatingAction = true;
   bool _visibilityInput = false;
   final textFieldController = TextEditingController();
+  ScrollController _scrollController = ScrollController();
 
   AudioPlayer _audioPlayer;
   AudioCache _audioCache;
-
 
   List<Message> _dialogue;
 
@@ -36,15 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _getAudioIntro() async {
     _audioPlayer = AudioPlayer();
-    AudioPlayer.logEnabled = true;
     _audioCache = AudioCache(fixedPlayer: _audioPlayer);
     _audioCache.load('intro.mp3');
     _audioCache.play('intro.mp3');
-
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
@@ -87,10 +86,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.only(
                       top: 15.0,
                     ),
+                    shrinkWrap: true,
+                    controller: _scrollController,
                     itemCount: _dialogue.length,
                     itemBuilder: (BuildContext context, int index) {
                       final bool isMe = _dialogue[index].sender == 'USER';
-                      return _buildMessage(_dialogue[index].message, isMe);
+                      return isMe
+                          ? _buildMessage(_dialogue[index].message, isMe)
+                          : Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.red[50],
+                                  child: Text('ВА'),),
+                                _buildMessage(_dialogue[index].message, isMe),
+                              ],
+                            );
                     }),
               ),
             ),
@@ -109,7 +119,9 @@ class _HomeScreenState extends State<HomeScreen> {
           : EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0),
       padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
       decoration: BoxDecoration(
-          color: isMe ? Theme.of(context).accentColor : Color(0xFFFFEFEE),
+          color: isMe
+              ? Theme.of(context).backgroundColor
+              : Theme.of(context).accentColor,
           borderRadius: isMe
               ? BorderRadius.only(
                   topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
@@ -122,9 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             message,
             style: TextStyle(
-                color: Colors.blueGrey,
+                color: Colors.black,
                 fontSize: 16.0,
-                fontWeight: FontWeight.w600),
+                fontWeight: FontWeight.normal),
           ),
         ],
       ),
@@ -176,14 +188,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Expanded(
                     child: TextField(
-                      controller: textFieldController,
+                  controller: textFieldController,
                   decoration: InputDecoration(hintText: 'Введите вопрос'),
                 )),
                 IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
                     setState(() {
-                      _dialogue.add(Message(message: textFieldController.text, sender: 'USER'));
+                      _dialogue.add(Message(
+                          message: textFieldController.text, sender: 'USER'));
                       textFieldController.text = '';
                     });
                     _getAnswer();
@@ -262,14 +275,20 @@ class _HomeScreenState extends State<HomeScreen> {
   void _getAnswer() async {
     Map<String, dynamic> answer = Map();
 
+    setState(() {
+      _dialogue
+          .add(Message(message: 'Нет связи с мозгом 😁😁😁', sender: 'VA'));
+    });
     var question = _dialogue.last.message.split("\s+");
-    final http.Response response = await http.post('http://127.0.0.1:5000/va/api/v1/question/text',
+    final http.Response response = await http.post(
+      'http://127.0.0.1:5000/va/api/v1/question/text',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-      'question': question.take(10).join(" "),
-    }),);
+        'question': question.take(10).join(" "),
+      }),
+    );
 
     if (response.statusCode == 200) {
       answer = jsonDecode(response.body);
@@ -278,7 +297,10 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       _getAudioAnswer(answer['audio_answer']);
     } else {
-      _dialogue.add(Message(message: 'Нет связи с мозгом 😁😁😁', sender: 'VA'));
+      setState(() {
+        _dialogue
+            .add(Message(message: 'Нет связи с мозгом 😁😁😁', sender: 'VA'));
+      });
       throw Exception('Failed to get answer');
     }
   }
@@ -286,5 +308,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void _getAudioAnswer(String url) async {
     AudioPlayer player = AudioPlayer();
     player.play(url);
+  }
+
+  _scrollToBottom() {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 }
