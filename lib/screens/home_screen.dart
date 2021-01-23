@@ -18,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _text = '';
   bool _visibilityFloatingAction = true;
   bool _visibilityInput = false;
+  bool _typing = false;
   final textFieldController = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
@@ -92,13 +93,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       final bool isMe = _dialogue[index].sender == 'USER';
                       return isMe
-                          ? _buildMessage(_dialogue[index].message, isMe)
+                          ? _buildMessage(_dialogue[index], isMe)
                           : Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.red[50],
-                                  child: Text('ВА'),),
-                                _buildMessage(_dialogue[index].message, isMe),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.red[50],
+                                    child: Text('ВА'),
+                                  ),
+                                ),
+                                Expanded(
+                                    child:
+                                        _buildMessage(_dialogue[index], isMe)),
                               ],
                             );
                     }),
@@ -112,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildMessage(String message, bool isMe) {
+  Widget _buildMessage(Message message, bool isMe) {
     return Container(
       margin: isMe
           ? EdgeInsets.only(top: 8.0, bottom: 8.0, left: 80.0)
@@ -127,16 +134,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
               : BorderRadius.only(
                   topRight: Radius.circular(15),
-                  bottomRight: Radius.circular(15))),
+                  bottomRight: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                  topLeft: Radius.circular(15))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            message,
+          !(_typing && message.iconTyping != '') ? Text(
+            message.message,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
                 fontWeight: FontWeight.normal),
+          ) : Image.asset(
+            message.iconTyping,
+            width: 50.0,
+            height: 20.0,
           ),
         ],
       ),
@@ -229,7 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_listening) {
       setState(() {
         _listening = false;
-        _dialogue.add(Message(message: _text, sender: 'USER'));
+        if (_text != '') {
+          _dialogue.add(Message(message: _text, sender: 'USER'));
+        }
         _text = '';
       });
       _speechToText.stop();
@@ -267,41 +282,48 @@ class _HomeScreenState extends State<HomeScreen> {
           _text = '';
         });
         _speechToText.stop();
-        _getAnswer();
       }
     }
   }
 
   void _getAnswer() async {
     Map<String, dynamic> answer = Map();
-
-    setState(() {
-      _dialogue
-          .add(Message(message: 'Нет связи с мозгом 😁😁😁', sender: 'VA'));
-    });
-    var question = _dialogue.last.message.split("\s+");
-    final http.Response response = await http.post(
-      'http://127.0.0.1:5000/va/api/v1/question/text',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'question': question.take(10).join(" "),
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      answer = jsonDecode(response.body);
+    if (_dialogue.last.sender == 'USER') {
+      var question = _dialogue.last.message.split("\s+");
       setState(() {
-        _dialogue.add(Message(message: answer['answer'], sender: 'VA'));
+        _dialogue.add(Message(iconTyping: 'assets/typing.gif', sender: 'VA'));
+        _typing = true;
       });
-      _getAudioAnswer(answer['audio_answer']);
-    } else {
-      setState(() {
-        _dialogue
-            .add(Message(message: 'Нет связи с мозгом 😁😁😁', sender: 'VA'));
-      });
-      throw Exception('Failed to get answer');
+      final http.Response response = await http.post(
+        'http://127.0.0.1:5000/va/api/v1/question/text',
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'question': question.take(10).join(" "),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        answer = jsonDecode(response.body);
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            _typing = false;
+            _dialogue.removeLast();
+            _dialogue.add(Message(message: answer['answer'], sender: 'VA'));
+          });
+        });
+        Future.delayed(const Duration(seconds: 1), () {
+          _getAudioAnswer(answer['audio_answer']);
+        });
+      } else {
+        setState(() {
+          _dialogue.add(Message(
+              message: 'Нет связи с мозгом 😁😁😁 (Ошибка сети)',
+              sender: 'VA'));
+        });
+        throw Exception('Failed to get answer');
+      }
     }
   }
 
