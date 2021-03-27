@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
@@ -294,15 +295,30 @@ class _HomeScreenState extends State<HomeScreen> {
         _dialogue.add(Message(iconTyping: 'assets/typing.gif', sender: 'VA'));
         _typing = true;
       });
-      final http.Response response = await http.post(
-        'http://127.0.0.1:5000/va/api/v1/question/text',
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'question': question.take(10).join(" "),
-        }),
-      );
+
+      final http.Response response = null;
+      try {
+        final http.Response response = await http.post(
+          'http://127.0.0.1:5000/va/api/v1/question/text',
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'question': question.take(10).join(" "),
+          }),
+        );
+      } on SocketException {
+        setState(() {
+          _typing = false;
+          _dialogue.removeLast();
+          _dialogue.add(Message(
+              message: 'Нет связи с мозгом 😁😁😁 (Нет связи с сервером)',
+              sender: 'VA'));
+        });
+        return;
+        // throw Exception('No Internet connection to the server');
+      }
+
 
       if (response.statusCode == 200) {
         answer = jsonDecode(response.body);
@@ -314,15 +330,20 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         });
         Future.delayed(const Duration(seconds: 1), () {
-          _getAudioAnswer(answer['audio_answer']);
+          if (answer['audioAnswer'] != '') {
+            _getAudioAnswer(answer['audioAnswer']);
+          }
         });
-      } else {
+      } else if (response.statusCode == 500) {
         setState(() {
+          _typing = false;
+          _dialogue.removeLast();
           _dialogue.add(Message(
-              message: 'Нет связи с мозгом 😁😁😁 (Ошибка сети)',
+              message: 'Нет связи с мозгом 😁😁😁 (Что-то пошло не так, как я хотел)',
               sender: 'VA'));
         });
-        throw Exception('Failed to get answer');
+        return;
+        // throw Exception('Failed to get answer');
       }
     }
   }
