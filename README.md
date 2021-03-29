@@ -1,6 +1,6 @@
 # va_client
 
-virtual assistant
+client for virtual assistant
 
 ## Getting Started
 
