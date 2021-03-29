@@ -1,12 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/message_model.dart';
-import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
+import 'package:va_client/utils/APIManager.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -31,7 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _dialogue = [Message(sender: 'VA', message: "Привет! Чем могу помочь?")];
+    _dialogue = [
+      Message(
+          sender: 'VA',
+          message: "Привет! Я - Виртуальный ассистент, Ваш верный помощник. "
+              "Чем могу помочь?")
+    ];
     _speechToText = stt.SpeechToText();
     _getAudioIntro();
   }
@@ -141,17 +143,19 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          !(_typing && message.iconTyping != '') ? Text(
-            message.message,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-                fontWeight: FontWeight.normal),
-          ) : Image.asset(
-            message.iconTyping,
-            width: 50.0,
-            height: 20.0,
-          ),
+          !(_typing && message.iconTyping != '')
+              ? Text(
+                  message.message,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.normal),
+                )
+              : Image.asset(
+                  message.iconTyping,
+                  width: 50.0,
+                  height: 20.0,
+                ),
         ],
       ),
     );
@@ -296,55 +300,43 @@ class _HomeScreenState extends State<HomeScreen> {
         _typing = true;
       });
 
-      final http.Response response = null;
-      try {
-        final http.Response response = await http.post(
-          'http://127.0.0.1:5000/va/api/v1/question/text',
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(<String, String>{
-            'question': question.take(10).join(" "),
-          }),
-        );
-      } on SocketException {
-        setState(() {
-          _typing = false;
-          _dialogue.removeLast();
-          _dialogue.add(Message(
-              message: 'Нет связи с мозгом 😁😁😁 (Нет связи с сервером)',
-              sender: 'VA'));
-        });
-        return;
-        // throw Exception('No Internet connection to the server');
-      }
-
-
-      if (response.statusCode == 200) {
-        answer = jsonDecode(response.body);
-        Future.delayed(const Duration(seconds: 1), () {
+      APIManager apiManager = APIManager();
+      apiManager.postAPICall("http://127.0.0.1:5000/va/api/v1/question/text",
+          {'question': question.take(10).join(" ")}).then((value) {
+        var statusCode = value["status"];
+        if (statusCode == 200) {
+          answer = value["response"];
+          Future.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              _typing = false;
+              _dialogue.removeLast();
+              _dialogue.add(Message(message: answer['answer'], sender: 'VA'));
+            });
+          });
+          Future.delayed(const Duration(seconds: 1), () {
+            if (answer['audioAnswer'] != '') {
+              _getAudioAnswer(answer['audioAnswer']);
+            }
+          });
+        } else if (statusCode == 500) {
           setState(() {
             _typing = false;
             _dialogue.removeLast();
-            _dialogue.add(Message(message: answer['answer'], sender: 'VA'));
+            _dialogue.add(Message(
+                message: 'Что-то пошло не так, как я хотел 😁', sender: 'VA'));
           });
-        });
-        Future.delayed(const Duration(seconds: 1), () {
-          if (answer['audioAnswer'] != '') {
-            _getAudioAnswer(answer['audioAnswer']);
-          }
-        });
-      } else if (response.statusCode == 500) {
+          return;
+        }
+      }, onError: (error) {
+        print(error);
         setState(() {
           _typing = false;
           _dialogue.removeLast();
-          _dialogue.add(Message(
-              message: 'Нет связи с мозгом 😁😁😁 (Что-то пошло не так, как я хотел)',
-              sender: 'VA'));
+          _dialogue
+              .add(Message(message: 'Нет связи с сервером 😁', sender: 'VA'));
         });
         return;
-        // throw Exception('Failed to get answer');
-      }
+      });
     }
   }
 
