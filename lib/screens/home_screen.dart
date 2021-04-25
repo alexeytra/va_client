@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+// Главный вью
 class _HomeScreenState extends State<HomeScreen> {
   stt.SpeechToText _speechToText;
   bool _listening = false;
@@ -17,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _visibilityFloatingAction = true;
   bool _visibilityInput = false;
   bool _typing = false;
+  bool _optionalQuestions = true;
   final textFieldController = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
@@ -116,12 +118,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Visibility(visible: _listening, child: _showUserQuestion()),
+          Visibility(
+              visible: _optionalQuestions, child: _showOptionalQuestions()),
           _buildInputQuestion()
         ],
       ),
     );
   }
 
+  // Соосбщения
   Widget _buildMessage(Message message, bool isMe) {
     return Container(
       margin: isMe
@@ -161,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Распознанный Вопрос пользователя
   Widget _showUserQuestion() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -178,6 +184,57 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _showOptionalQuestions() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: FilterChip(
+                  label: Text("Номер телефона профкома",
+                      style: TextStyle(fontSize: 16)),
+                  onSelected: (text) {},
+                )
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: FilterChip(
+                  label: Text("Номер телефона профкома",
+                      style: TextStyle(fontSize: 16)),
+                  onSelected: (text) {},
+                )
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: FilterChip(
+                  label: Text("Номер телефона профкома",
+                      style: TextStyle(fontSize: 16)),
+                  onSelected: (text) {},
+                )
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: FilterChip(
+                  label: Text("Номер телефона профкома",
+                      style: TextStyle(fontSize: 16)),
+                  onSelected: (text) {},
+                )
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Ввод вопроса
   Widget _buildInputQuestion() {
     return Container(
       padding: EdgeInsets.only(bottom: 20.0, left: 15.0, right: 15),
@@ -243,6 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Слушаем голос
   void _listen() async {
     if (_listening) {
       setState(() {
@@ -291,6 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Получаем ответ
   void _getAnswer() async {
     Map<String, dynamic> answer = Map();
     if (_dialogue.last.sender == 'USER') {
