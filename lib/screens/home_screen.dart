@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _visibilityFloatingAction = true;
   bool _visibilityInput = false;
   bool _typing = false;
-  bool _optionalQuestions = true;
+  bool _areOptionalQuestions = false;
   final textFieldController = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   AudioCache _audioCache;
 
   List<Message> _dialogue;
+  List<String> _optionalQuestions;
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
           message: "Привет! Я - Виртуальный ассистент, Ваш верный помощник. "
               "Чем могу помочь?")
     ];
+    _optionalQuestions = [];
     _speechToText = stt.SpeechToText();
     _getAudioIntro();
   }
@@ -119,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Visibility(visible: _listening, child: _showUserQuestion()),
           Visibility(
-              visible: _optionalQuestions, child: _showOptionalQuestions()),
+              visible: _areOptionalQuestions, child: _showOptionalQuestions()),
           _buildInputQuestion()
         ],
       ),
@@ -195,40 +197,26 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: FilterChip(
-                  label: Text("Номер телефона профкома",
-                      style: TextStyle(fontSize: 16)),
-                  onSelected: (text) {},
-                )
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: FilterChip(
-                  label: Text("Номер телефона профкома",
-                      style: TextStyle(fontSize: 16)),
-                  onSelected: (text) {},
-                )
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: FilterChip(
-                  label: Text("Номер телефона профкома",
-                      style: TextStyle(fontSize: 16)),
-                  onSelected: (text) {},
-                )
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: FilterChip(
-                  label: Text("Номер телефона профкома",
-                      style: TextStyle(fontSize: 16)),
-                  onSelected: (text) {},
-                )
-            ),
-          ],
+          children: _optionalQuestions == null
+              ? <Widget>[]
+              : _optionalQuestions
+                  .map((optionalQuestion) => Padding(
+                      padding: EdgeInsets.only(left: 10.0),
+                      child: FilterChip(
+                        label: Text(optionalQuestion,
+                            style: TextStyle(fontSize: 16)),
+                        onSelected: (question) {
+                          setState(() {
+                            _areOptionalQuestions = false;
+                          });
+                          _dialogue.add(Message(
+                              message: optionalQuestion,
+                              sender: 'USER'));
+                          textFieldController.text = '';
+                          _getAnswer();
+                        },
+                      )))
+                  .toList(),
         ),
       ),
     );
@@ -371,6 +359,15 @@ class _HomeScreenState extends State<HomeScreen> {
               _dialogue.removeLast();
               _dialogue.add(Message(message: answer['answer'], sender: 'VA'));
             });
+            List<String> optQues =
+                new List<String>.from(answer['optionalQuestions']);
+            if (optQues.length > 0) {
+              setState(() {
+                _optionalQuestions.clear();
+                _optionalQuestions.addAll(optQues);
+                _areOptionalQuestions = true;
+              });
+            }
           });
           Future.delayed(const Duration(seconds: 1), () {
             if (answer['audioAnswer'] != '') {
