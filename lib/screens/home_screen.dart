@@ -1,7 +1,7 @@
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:va_client/message_model.dart';
+import 'package:va_client/models/message_model.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:va_client/utils/APIManager.dart';
 
