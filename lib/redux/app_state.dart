@@ -10,7 +10,7 @@ class AppState {
   bool typing = false;
   bool areOptionalQuestions = false;
 
-  AppState({@required this.messages,
+  AppState({this.messages,
     this.optionalQuestions,
     this.listening,
     this.visibilityFloatingAction,
@@ -28,6 +28,4 @@ class AppState {
                   "Чем могу помочь?")
         ]),
         optionalQuestions = List.unmodifiable(<String>[]);
-
-
 }
