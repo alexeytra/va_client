@@ -5,7 +5,7 @@ class Message {
   final String message;
   final String iconTyping;
 
-  Message({@required this.sender, @required this.message, this.iconTyping});
+  Message({@required this.sender, this.message, this.iconTyping});
 
   Message copyWith({String sender, String message, String iconType}) {
     return Message(

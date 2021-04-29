@@ -9,7 +9,7 @@ class ShowMessage extends StatelessWidget {
   final bool isMe;
   final Message message;
 
-  ShowMessage({@required this.isMe, @required this.message})
+  ShowMessage({@required this.isMe, @required this.message});
 
   @override
   Widget build(BuildContext context) {
