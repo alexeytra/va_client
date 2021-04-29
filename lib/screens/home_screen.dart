@@ -65,7 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: FloatingActionButton(
               elevation: 0,
               backgroundColor: Theme.of(context).primaryColor,
-              onPressed: _listen(viewModel),
+              onPressed: () {
+                _listen(viewModel);
+              },
               child: Icon(viewModel.listening ? Icons.mic : Icons.mic_none),
             ),
           ),
@@ -125,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Visibility(
                       visible: viewModel.listening, child: _showUserQuestion()),
                   Visibility(
-                      visible: viewModel.listening,
+                      visible: viewModel.areOptionalQuestions,
                       child: ShowOptionalQuestions()),
                   InputQuestion(textFieldController: this.textFieldController)
                 ],
@@ -154,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Слушаем голос
-  _listen(_ViewModel viewModel) async {
+  void _listen(_ViewModel viewModel) async {
     if (viewModel.listening) {
       viewModel.changeListening(false);
       if (_text != '') {
@@ -316,7 +318,7 @@ class _ViewModel {
     }
 
     return _ViewModel(
-      listening: store.state.visibilityFloatingAction,
+      listening: store.state.listening,
       messages: store.state.messages,
       changeListening: _onChangeListening,
       addMessage: _onAddMessage,
