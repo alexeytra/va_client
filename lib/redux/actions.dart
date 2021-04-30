@@ -26,10 +26,10 @@ class ChangeVisibilityInputAction {
   ChangeVisibilityInputAction(this.changeVisibilityInput);
 }
 
-class ChangeVisibilityFloatingActionAction {
-  final bool changeVisibilityFloatingAction;
+class ChangeVisibilityFloatingAction {
+  final bool changeVisibilityFloating;
 
-  ChangeVisibilityFloatingActionAction(this.changeVisibilityFloatingAction);
+  ChangeVisibilityFloatingAction(this.changeVisibilityFloating);
 }
 
 class ChangeListeningAction {

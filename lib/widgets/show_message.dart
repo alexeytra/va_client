@@ -5,7 +5,6 @@ import 'package:va_client/models/message_model.dart';
 import 'package:va_client/redux/app_state.dart';
 
 class ShowMessage extends StatelessWidget {
-
   final bool isMe;
   final Message message;
 
@@ -24,12 +23,12 @@ class ShowMessage extends StatelessWidget {
               : Theme.of(context).accentColor,
           borderRadius: isMe
               ? BorderRadius.only(
-              topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
+                  topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
               : BorderRadius.only(
-              topRight: Radius.circular(15),
-              bottomRight: Radius.circular(15),
-              bottomLeft: Radius.circular(15),
-              topLeft: Radius.circular(15))),
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                  topLeft: Radius.circular(15))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -38,19 +37,22 @@ class ShowMessage extends StatelessWidget {
             converter: (store) => store.state.typing,
             builder: (context, typing) {
               return !(typing && message.iconTyping != '')
-                  ? Text(message.message, style: TextStyle(color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.normal),)
+                  ? Text(
+                      message.message,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal),
+                    )
                   : Image.asset(
-                message.iconTyping,
-                width: 50.0,
-                height: 20.0,
-              );
+                      message.iconTyping,
+                      width: 50.0,
+                      height: 20.0,
+                    );
             },
           ),
         ],
       ),
     );
   }
-
 }

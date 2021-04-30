@@ -54,7 +54,7 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions);
 
-    case ChangeVisibilityFloatingActionAction:
+    case ChangeVisibilityFloatingAction:
       return AppState(
           messages: state.messages,
           optionalQuestions: state.optionalQuestions,

@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/models/message_model.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/utils/APIManager.dart';
@@ -44,10 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-    return StoreConnector<AppState, _ViewModel>(
+    return StoreConnector<AppState, ViewModel>(
       distinct: true,
-      converter: (store) => _ViewModel.create(store),
-      builder: (context, _ViewModel viewModel) => Scaffold(
+      converter: (store) => ViewModel.create(store),
+      builder: (context, ViewModel viewModel) => Scaffold(
           backgroundColor: Theme.of(context).primaryColor,
           appBar: AppBar(
             title: Text(
@@ -71,11 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(viewModel.listening ? Icons.mic : Icons.mic_none),
             ),
           ),
-          body: StoreConnector<AppState, List<Message>>(
-            distinct: true,
-            converter: (store) => store.state.messages,
-            builder: (context, messages) {
-              return Column(
+          body: Column(
                 children: [
                   Expanded(
                     child: Container(
@@ -98,13 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             shrinkWrap: true,
                             controller: _scrollController,
-                            itemCount: messages.length,
+                            itemCount: viewModel.messages.length,
                             itemBuilder: (BuildContext context, int index) {
                               final bool isMe =
-                                  messages[index].sender == 'USER';
+                                  viewModel.messages[index].sender == 'USER';
                               return isMe
                                   ? ShowMessage(
-                                      isMe: isMe, message: messages[index])
+                                      isMe: isMe, message: viewModel.messages[index])
                                   : Row(
                                       children: [
                                         Padding(
@@ -116,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Expanded(
                                             child: ShowMessage(
-                                                message: messages[index],
+                                                message: viewModel.messages[index],
                                                 isMe: isMe)),
                                       ],
                                     );
@@ -124,16 +121,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  InputQuestion(textFieldController: this.textFieldController, viewModel: viewModel,),
                   Visibility(
                       visible: viewModel.listening, child: _showUserQuestion()),
                   Visibility(
                       visible: viewModel.areOptionalQuestions,
-                      child: ShowOptionalQuestions()),
-                  InputQuestion(textFieldController: this.textFieldController)
+                      child: ShowOptionalQuestions(viewModel: viewModel,)),
                 ],
-              );
-            },
-          )),
+              ),
+          ),
     );
   }
 
@@ -156,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Слушаем голос
-  void _listen(_ViewModel viewModel) async {
+  void _listen(ViewModel viewModel) async {
     if (viewModel.listening) {
       viewModel.changeListening(false);
       if (_text != '') {
@@ -199,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Получаем ответ
-  void getAnswer(_ViewModel viewModel) async {
+  void getAnswer(ViewModel viewModel) async {
     Map<String, dynamic> answer = Map();
     if (viewModel.messages.last.sender == 'USER') {
       var question = viewModel.messages.last.message.split("\s+");
@@ -257,76 +253,5 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _scrollToBottom() {
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-  }
-}
-
-class _ViewModel {
-  final bool listening;
-  final bool areOptionalQuestions;
-  final bool visibilityFloating;
-  final List<Message> messages;
-  final bool typing;
-
-  final Function(bool) changeListening;
-  final Function(Message) addMessage;
-  final Function(bool) changeTyping;
-  final Function() removeLastMessage;
-  final Function() clearOptionalQuestions;
-  final Function(List<String>) addOptionalQuestions;
-  final Function(bool) changeAreOptionalQuestions;
-
-  _ViewModel({
-      this.clearOptionalQuestions, this.addOptionalQuestions, this.changeAreOptionalQuestions,
-      this.listening,
-      this.visibilityFloating,
-      this.areOptionalQuestions,
-      this.messages,
-      this.typing,
-      this.changeListening,
-      this.addMessage,
-      this.changeTyping,
-      this.removeLastMessage
-      });
-
-  factory _ViewModel.create(Store<AppState> store) {
-    _onChangeListening(bool listening) {
-      store.dispatch(ChangeListeningAction(listening));
-    }
-
-    _onAddMessage(Message message) {
-      store.dispatch(AddMessageAction(message));
-    }
-
-    _onChangeTyping(bool typing) {
-      store.dispatch(ProcessTypingAction(typing));
-    }
-
-    _onRemoveLastMessage() {
-      store.dispatch(RemoveLastMessageAction());
-    }
-
-    _onClearOptionalQuestions() {
-      store.dispatch(ClearOptionalQuestionsAction());
-    }
-
-    _onAddOptionalQuestions(List<String> optQuestions) {
-      store.dispatch(AddOptionalQuestionsAction(optQuestions));
-    }
-
-    _onChangeAreOptionalQuestions(bool areOptQuestions) {
-      store.dispatch(ChangeAreOptionalQuestionsAction(areOptQuestions));
-    }
-
-    return _ViewModel(
-      listening: store.state.listening,
-      messages: store.state.messages,
-      changeListening: _onChangeListening,
-      addMessage: _onAddMessage,
-      changeTyping: _onChangeTyping,
-      removeLastMessage: _onRemoveLastMessage,
-      clearOptionalQuestions: _onClearOptionalQuestions,
-      addOptionalQuestions: _onAddOptionalQuestions,
-      changeAreOptionalQuestions: _onChangeAreOptionalQuestions
-    );
   }
 }

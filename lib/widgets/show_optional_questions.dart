@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:va_client/models/message_model.dart';
-import 'package:va_client/redux/actions.dart';
-import 'package:va_client/redux/app_state.dart';
+import 'package:va_client/models/view_model.dart';
 
 class ShowOptionalQuestions extends StatelessWidget {
+  final ViewModel viewModel;
+
+  ShowOptionalQuestions({@required this.viewModel});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,11 +17,7 @@ class ShowOptionalQuestions extends StatelessWidget {
       child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          child: StoreConnector<AppState, _ViewModel>(
-              distinct: true,
-              converter: (store) => _ViewModel.create(store),
-              builder: (context, _ViewModel viewModel) =>
-                  Row(
+          child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: viewModel.optionalQuestions == null
                   ? <Widget>[]
@@ -41,37 +37,7 @@ class ShowOptionalQuestions extends StatelessWidget {
                           )))
                       .toList(),
             ),
-          )
           ),
-    );
-  }
-}
-
-class _ViewModel {
-  final List<String> optionalQuestions;
-
-  final Function(Message) addMessage;
-  final Function(bool) changeAreOptionalQuestions;
-
-  _ViewModel({
-    this.optionalQuestions,
-    this.addMessage,
-    this.changeAreOptionalQuestions
-  });
-
-  factory _ViewModel.create(Store<AppState> store) {
-    _onAddMessage(Message message) {
-      store.dispatch(AddMessageAction(message));
-    }
-
-    _onChangeAreOptionalQuestions(bool areOptionalQuestions) {
-      store.dispatch(ChangeAreOptionsQuestionsAction(areOptionalQuestions));
-    }
-
-    return _ViewModel(
-      optionalQuestions: store.state.optionalQuestions,
-      addMessage: _onAddMessage,
-      changeAreOptionalQuestions: _onChangeAreOptionalQuestions,
     );
   }
 }
