@@ -28,4 +28,9 @@ class AppState {
                   "Чем могу помочь?")
         ]),
         optionalQuestions = List.unmodifiable(<String>[]);
+
+  @override
+  String toString() {
+    return 'AppState{messages: $messages, optionalQuestions: $optionalQuestions, listening: $listening, visibilityFloatingAction: $visibilityFloatingAction, visibilityInput: $visibilityInput, typing: $typing, areOptionalQuestions: $areOptionalQuestions}';
+  }
 }

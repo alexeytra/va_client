@@ -22,6 +22,7 @@ class ViewModel {
   final Function(bool) changeAreOptionalQuestions;
   final Function(bool) changeVisibilityFloating;
   final Function(bool) changeVisibilityInput;
+  final Function(String) sendMessage;
 
   ViewModel({
     this.clearOptionalQuestions, this.addOptionalQuestions, this.changeAreOptionalQuestions,
@@ -37,7 +38,8 @@ class ViewModel {
     this.visibilityInput,
     this.changeVisibilityInput,
     this.changeVisibilityFloating,
-    this.optionalQuestions
+    this.optionalQuestions,
+    this.sendMessage
   });
 
   factory ViewModel.create(Store<AppState> store) {
@@ -85,6 +87,10 @@ class ViewModel {
         areOptionalQuestions: store.state.areOptionalQuestions,
         visibilityInput: store.state.visibilityInput,
         optionalQuestions: store.state.optionalQuestions,
+        sendMessage: (String message) {
+          store.dispatch(sendMessage(message));
+        },
+
         changeVisibilityFloating: _onChangeVisibilityFloating,
         changeListening: _onChangeListening,
         addMessage: _onAddMessage,

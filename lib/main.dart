@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/redux/reducer.dart';
 import 'package:va_client/screens/splash_screen.dart';
@@ -10,7 +11,10 @@ void main() {
   final Store<AppState> store = Store<AppState>(
     appStateReducer,
     initialState: AppState.initialState(),
-    middleware: [new LoggingMiddleware.printer()],
+    middleware: [
+      thunkMiddleware,
+      new LoggingMiddleware.printer()
+    ],
   );
   print('Initial state: ${store.state.visibilityInput}');
 

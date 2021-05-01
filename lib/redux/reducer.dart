@@ -4,14 +4,8 @@ import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 
 AppState appStateReducer(AppState state, dynamic action) {
-  // if (action is AddMessageAction) {
-  //   return AppState(
-  //       messages: []
-  //         ..addAll(state.messages)
-  //         ..add(action.addedMessage));
-  // }
 
-  switch (action) {
+  switch (action.runtimeType) {
     case AddMessageAction:
       return AppState(
           messages: []
@@ -59,7 +53,7 @@ AppState appStateReducer(AppState state, dynamic action) {
           messages: state.messages,
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
-          visibilityFloatingAction: action.changeVisibilityFloatingAction,
+          visibilityFloatingAction: action.changeVisibilityFloating,
           visibilityInput: state.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions);

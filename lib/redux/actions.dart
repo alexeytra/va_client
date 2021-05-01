@@ -1,4 +1,8 @@
+import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 import 'package:va_client/models/message_model.dart';
+import 'package:va_client/services/message_service.dart';
+
 // add
 class AddMessageAction {
   final Message addedMessage;
@@ -58,3 +62,13 @@ class ChangeAreOptionalQuestionsAction {
   ChangeAreOptionalQuestionsAction(this.changeAreOptionalQuestions);
 }
 
+ThunkAction sendQuestionAction(String message) {
+  return (Store store) async {
+    new Future(() {
+      // store.dispatch(action) экшн для печатания сообщения
+      sendQuestion(message).then(
+          (message) => {store.dispatch(AddMessageAction(message))},
+          onError: (error) => store.dispatch(AddMessageAction(error)));
+    });
+  };
+}

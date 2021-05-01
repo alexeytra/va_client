@@ -1,12 +1,10 @@
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/models/message_model.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:va_client/models/view_model.dart';
-import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/utils/APIManager.dart';
 import 'package:va_client/widgets/input_question.dart';
@@ -121,12 +119,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  InputQuestion(textFieldController: this.textFieldController, viewModel: viewModel,),
                   Visibility(
                       visible: viewModel.listening, child: _showUserQuestion()),
                   Visibility(
                       visible: viewModel.areOptionalQuestions,
                       child: ShowOptionalQuestions(viewModel: viewModel,)),
+                  InputQuestion(textFieldController: this.textFieldController, viewModel: viewModel)
                 ],
               ),
           ),
@@ -157,12 +155,12 @@ class _HomeScreenState extends State<HomeScreen> {
       viewModel.changeListening(false);
       if (_text != '') {
         viewModel.addMessage(Message(message: _text, sender: 'USER'));
+        viewModel.sendMessage(_text);
       }
       setState(() {
         _text = '';
       });
       _speechToText.stop();
-      getAnswer(viewModel);
       return;
     }
     if (!viewModel.listening) {
@@ -195,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Получаем ответ
-  void getAnswer(ViewModel viewModel) async {
+ /* void getAnswer(ViewModel viewModel) async {
     Map<String, dynamic> answer = Map();
     if (viewModel.messages.last.sender == 'USER') {
       var question = viewModel.messages.last.message.split("\s+");
@@ -244,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       });
     }
-  }
+  }*/
 
   void _getAudioAnswer(String url) async {
     AudioPlayer player = AudioPlayer();
