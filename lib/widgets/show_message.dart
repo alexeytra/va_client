@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:va_client/models/message_model.dart';
-import 'package:va_client/redux/app_state.dart';
 
 class ShowMessage extends StatelessWidget {
   final bool isMe;
   final Message message;
+  final typing;
 
-  ShowMessage({@required this.isMe, @required this.message});
+  ShowMessage(
+      {@required this.isMe, @required this.message, @required this.typing});
 
   @override
   Widget build(BuildContext context) {
@@ -32,25 +32,19 @@ class ShowMessage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          StoreConnector<AppState, bool>(
-            distinct: true,
-            converter: (store) => store.state.typing,
-            builder: (context, typing) {
-              return !(typing && message.iconTyping != '')
-                  ? Text(
-                      message.message,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.normal),
-                    )
-                  : Image.asset(
-                      message.iconTyping,
-                      width: 50.0,
-                      height: 20.0,
-                    );
-            },
-          ),
+          !(typing && message.iconTyping != null)
+              ? Text(
+                  message.message,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.normal),
+                )
+              : Image.asset(
+                  message.iconTyping,
+                  width: 50.0,
+                  height: 20.0,
+                ),
         ],
       ),
     );

@@ -83,7 +83,7 @@ class ViewModel {
     return ViewModel(
         listening: store.state.listening,
         messages: store.state.messages,
-        visibilityFloating: store.state.visibilityFloatingAction,
+        visibilityFloating: store.state.visibilityFloating,
         typing: store.state.typing,
         areOptionalQuestions: store.state.areOptionalQuestions,
         visibilityInput: store.state.visibilityInput,

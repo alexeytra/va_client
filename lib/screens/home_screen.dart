@@ -15,12 +15,11 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-// Главный вью
 class _HomeScreenState extends State<HomeScreen> {
   stt.SpeechToText _speechToText;
   String _text = '';
   final textFieldController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
+  final _scrollController = ScrollController();
 
   AudioPlayer _audioPlayer;
   AudioCache _audioCache;
@@ -41,9 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
+      onDidChange: (_) => WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom()),
       converter: (store) => ViewModel.create(store),
       builder: (context, ViewModel viewModel) => Scaffold(
           backgroundColor: Theme.of(context).primaryColor,
@@ -97,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               final isMe = viewModel.messages[index].sender == 'USER';
                               return isMe
                                   ? ShowMessage(
-                                      isMe: isMe, message: viewModel.messages[index])
+                                      isMe: isMe, message: viewModel.messages[index], typing: viewModel.typing)
                                   : Row(
                                       children: [
                                         Padding(
@@ -110,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Expanded(
                                             child: ShowMessage(
                                                 message: viewModel.messages[index],
-                                                isMe: isMe)),
+                                                isMe: isMe, typing: viewModel.typing)),
                                       ],
                                     );
                             }),
@@ -189,63 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
   }
-
-  // Получаем ответ
- /* void getAnswer(ViewModel viewModel) async {
-    Map<String, dynamic> answer = Map();
-    if (viewModel.messages.last.sender == 'USER') {
-      var question = viewModel.messages.last.message.split("\s+");
-      viewModel
-          .addMessage(Message(iconTyping: 'assets/typing.gif', sender: 'VA'));
-      viewModel.changeTyping(true);
-
-      APIManager apiManager = APIManager();
-      apiManager.postAPICall("http://127.0.0.1:5000/va/api/v1/question/text",
-          {'question': question.take(10).join(" ")}).then((value) {
-        var statusCode = value["status"];
-        if (statusCode == 200) {
-          answer = value["response"];
-          Future.delayed(const Duration(seconds: 1), () {
-            viewModel.changeTyping(false);
-            viewModel.removeLastMessage();
-            viewModel
-                .addMessage(Message(message: answer['answer'], sender: 'VA'));
-
-            List<String> optQues =
-                new List<String>.from(answer['optionalQuestions']);
-            if (optQues.length > 0) {
-              viewModel.clearOptionalQuestions();
-              viewModel.addOptionalQuestions(optQues);
-              viewModel.changeAreOptionalQuestions(true);
-            }
-          });
-          Future.delayed(const Duration(seconds: 1), () {
-            if (answer['audioAnswer'] != '') {
-              _getAudioAnswer(answer['audioAnswer']);
-            }
-          });
-        } else if (statusCode == 500) {
-          viewModel.changeTyping(false);
-          viewModel.removeLastMessage();
-          viewModel.addMessage(Message(
-              message: 'Что-то пошло не так, как я хотел 😁', sender: 'VA'));
-          return;
-        }
-      }, onError: (error) {
-        print(error);
-        viewModel.changeTyping(false);
-        viewModel.removeLastMessage();
-        viewModel.addMessage(
-            Message(message: 'Нет связи с сервером 😁', sender: 'VA'));
-        return;
-      });
-    }
-  }*/
-
-  /*void _getAudioAnswer(String url) async {
-    AudioPlayer player = AudioPlayer();
-    player.play(url);
-  }*/
 
   void _scrollToBottom() {
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);

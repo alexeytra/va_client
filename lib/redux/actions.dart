@@ -62,12 +62,25 @@ class ChangeAreOptionalQuestionsAction {
   ChangeAreOptionalQuestionsAction(this.changeAreOptionalQuestions);
 }
 
+class SendQuestionRequestAction {
+  SendQuestionRequestAction();
+}
+
+class SendQuestionCompletedAction {
+  final Message msg;
+
+  SendQuestionCompletedAction(this.msg);
+}
+
 ThunkAction sendQuestionAction(String message) {
   return (Store store) async {
     await Future(() async {
+      store.dispatch(SendQuestionRequestAction());
       await sendQuestion(message).then((msg) {
-        store.dispatch(AddMessageAction(msg));
-      }, onError: (error) => store.dispatch(AddMessageAction(error)));
+        Future.delayed(const Duration(seconds: 1), () {
+          store.dispatch(SendQuestionCompletedAction(msg));
+        });
+      }, onError: (error) => store.dispatch(AddMessageAction(Message(message: 'Что-то пошло не так 😁', sender: 'VA'))));
     });
     // store.dispatch(action) экшн для печатания сообщения
   };

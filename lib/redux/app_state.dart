@@ -5,7 +5,7 @@ class AppState {
   final List<Message> messages;
   List<String> optionalQuestions;
   bool listening = false;
-  bool visibilityFloatingAction = true;
+  bool visibilityFloating = true;
   bool visibilityInput = false;
   bool typing = false;
   bool areOptionalQuestions = false;
@@ -14,7 +14,7 @@ class AppState {
       {@required this.messages,
       @required this.optionalQuestions,
       @required this.listening,
-      @required this.visibilityFloatingAction,
+      @required this.visibilityFloating,
       @required this.visibilityInput,
       @required this.typing,
       @required this.areOptionalQuestions});
@@ -31,6 +31,6 @@ class AppState {
 
   @override
   String toString() {
-    return 'AppState{messages: $messages, optionalQuestions: $optionalQuestions, listening: $listening, visibilityFloatingAction: $visibilityFloatingAction, visibilityInput: $visibilityInput, typing: $typing, areOptionalQuestions: $areOptionalQuestions}';
+    return 'AppState{messages: $messages, optionalQuestions: $optionalQuestions, listening: $listening, visibilityFloatingAction: $visibilityFloating, visibilityInput: $visibilityInput, typing: $typing, areOptionalQuestions: $areOptionalQuestions}';
   }
 }

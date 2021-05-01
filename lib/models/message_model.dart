@@ -14,4 +14,9 @@ class Message {
       iconTyping: message ?? this.message
     );
   }
+
+  @override
+  String toString() {
+    return 'Message{sender: $sender, message: $message, iconTyping: $iconTyping}';
+  }
 }
