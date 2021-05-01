@@ -1,6 +1,7 @@
 import 'package:redux/redux.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
+import 'package:va_client/services/message_service.dart';
 
 import 'message_model.dart';
 
@@ -43,39 +44,39 @@ class ViewModel {
   });
 
   factory ViewModel.create(Store<AppState> store) {
-    _onChangeListening(bool listening) {
+    void _onChangeListening(bool listening) {
       store.dispatch(ChangeListeningAction(listening));
     }
 
-    _onAddMessage(Message message) {
+    void _onAddMessage(Message message) {
       store.dispatch(AddMessageAction(message));
     }
 
-    _onChangeTyping(bool typing) {
+    void _onChangeTyping(bool typing) {
       store.dispatch(ProcessTypingAction(typing));
     }
 
-    _onRemoveLastMessage() {
+    void _onRemoveLastMessage() {
       store.dispatch(RemoveLastMessageAction());
     }
 
-    _onClearOptionalQuestions() {
+    void _onClearOptionalQuestions() {
       store.dispatch(ClearOptionalQuestionsAction());
     }
 
-    _onAddOptionalQuestions(List<String> optQuestions) {
+    void _onAddOptionalQuestions(List<String> optQuestions) {
       store.dispatch(AddOptionalQuestionsAction(optQuestions));
     }
 
-    _onChangeAreOptionalQuestions(bool areOptQuestions) {
+    void _onChangeAreOptionalQuestions(bool areOptQuestions) {
       store.dispatch(ChangeAreOptionalQuestionsAction(areOptQuestions));
     }
     
-    _onChangeVisibilityFloating(bool visibilityFloating) {
+    void _onChangeVisibilityFloating(bool visibilityFloating) {
       store.dispatch(ChangeVisibilityFloatingAction(visibilityFloating));
     }
 
-    _onChangeVisibilityInput(bool visibilityInput) {
+    void _onChangeVisibilityInput(bool visibilityInput) {
       store.dispatch(ChangeVisibilityInputAction(visibilityInput));
     }
     
@@ -88,7 +89,7 @@ class ViewModel {
         visibilityInput: store.state.visibilityInput,
         optionalQuestions: store.state.optionalQuestions,
         sendMessage: (String message) {
-          store.dispatch(sendMessage(message));
+          store.dispatch(sendQuestionAction(message));
         },
 
         changeVisibilityFloating: _onChangeVisibilityFloating,

@@ -6,7 +6,6 @@ import 'package:va_client/models/message_model.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/app_state.dart';
-import 'package:va_client/utils/APIManager.dart';
 import 'package:va_client/widgets/input_question.dart';
 import 'package:va_client/widgets/show_message.dart';
 import 'package:va_client/widgets/show_optional_questions.dart';
@@ -21,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   stt.SpeechToText _speechToText;
   String _text = '';
   final textFieldController = TextEditingController();
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   AudioPlayer _audioPlayer;
   AudioCache _audioCache;
@@ -33,11 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _getAudioIntro();
   }
 
-  _getAudioIntro() async {
+  void _getAudioIntro() async {
     _audioPlayer = AudioPlayer();
     _audioCache = AudioCache(fixedPlayer: _audioPlayer);
-    _audioCache.load('intro.mp3');
-    _audioCache.play('intro.mp3');
+    await _audioCache.load('intro.mp3');
+    await _audioCache.play('intro.mp3');
   }
 
   @override
@@ -50,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Theme.of(context).primaryColor,
           appBar: AppBar(
             title: Text(
-              "Виртуальный ассистент",
+              'Виртуальный ассистент',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
@@ -95,8 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             controller: _scrollController,
                             itemCount: viewModel.messages.length,
                             itemBuilder: (BuildContext context, int index) {
-                              final bool isMe =
-                                  viewModel.messages[index].sender == 'USER';
+                              final isMe = viewModel.messages[index].sender == 'USER';
                               return isMe
                                   ? ShowMessage(
                                       isMe: isMe, message: viewModel.messages[index])
@@ -124,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Visibility(
                       visible: viewModel.areOptionalQuestions,
                       child: ShowOptionalQuestions(viewModel: viewModel,)),
-                  InputQuestion(textFieldController: this.textFieldController, viewModel: viewModel)
+                  InputQuestion(textFieldController: textFieldController, viewModel: viewModel)
                 ],
               ),
           ),
@@ -160,11 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _text = '';
       });
-      _speechToText.stop();
+      await _speechToText.stop();
       return;
     }
     if (!viewModel.listening) {
-      bool available = await _speechToText.initialize(
+      var available = await _speechToText.initialize(
         onStatus: (val) {
           if (val == 'notListening') {
             viewModel.changeListening(false);
@@ -178,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (available) {
         viewModel.changeListening(true);
-        _speechToText.listen(
+        await _speechToText.listen(
           localeId: 'ru-RU',
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
@@ -187,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         viewModel.changeListening(false);
         viewModel.addMessage(Message(message: _text, sender: 'USER'));
-        _speechToText.stop();
+        await _speechToText.stop();
       }
     }
   }
@@ -244,12 +242,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }*/
 
-  void _getAudioAnswer(String url) async {
+  /*void _getAudioAnswer(String url) async {
     AudioPlayer player = AudioPlayer();
     player.play(url);
-  }
+  }*/
 
-  _scrollToBottom() {
+  void _scrollToBottom() {
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 }

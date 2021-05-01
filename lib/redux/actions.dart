@@ -64,11 +64,11 @@ class ChangeAreOptionalQuestionsAction {
 
 ThunkAction sendQuestionAction(String message) {
   return (Store store) async {
-    new Future(() {
-      // store.dispatch(action) экшн для печатания сообщения
-      sendQuestion(message).then(
-          (message) => {store.dispatch(AddMessageAction(message))},
-          onError: (error) => store.dispatch(AddMessageAction(error)));
+    await Future(() async {
+      await sendQuestion(message).then((msg) {
+        store.dispatch(AddMessageAction(msg));
+      }, onError: (error) => store.dispatch(AddMessageAction(error)));
     });
+    // store.dispatch(action) экшн для печатания сообщения
   };
 }

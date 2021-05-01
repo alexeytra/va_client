@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/view_model.dart';
-import 'package:va_client/redux/actions.dart';
-import 'package:va_client/redux/app_state.dart';
 
 class InputQuestion extends StatelessWidget {
   final textFieldController;
@@ -48,9 +44,8 @@ class InputQuestion extends StatelessWidget {
                       onPressed: () {
                         viewModel.addMessage(Message(
                             message: textFieldController.text, sender: 'USER'));
-                        // TODO: Нужно менять через стейт? наверно лучше переместить в стор
+                        viewModel.sendMessage(textFieldController.text);
                         textFieldController.text = '';
-                        // _getAnswer();
                       },
                       color: Theme.of(context).primaryColor,
                     )

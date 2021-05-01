@@ -8,12 +8,12 @@ import 'package:va_client/redux/reducer.dart';
 import 'package:va_client/screens/splash_screen.dart';
 
 void main() {
-  final Store<AppState> store = Store<AppState>(
+  final store = Store<AppState>(
     appStateReducer,
     initialState: AppState.initialState(),
     middleware: [
       thunkMiddleware,
-      new LoggingMiddleware.printer()
+      LoggingMiddleware.printer()
     ],
   );
   print('Initial state: ${store.state.visibilityInput}');

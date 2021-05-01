@@ -1,5 +1,3 @@
-import 'package:redux/redux.dart';
-import 'package:va_client/models/message_model.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 

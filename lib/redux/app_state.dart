@@ -24,8 +24,8 @@ class AppState {
           Message(
               sender: 'VA',
               message:
-                  "Привет! Я - Виртуальный ассистент, Ваш верный помощник. "
-                  "Чем могу помочь?")
+                  'Привет! Я - Виртуальный ассистент, Ваш верный помощник. '
+                  'Чем могу помочь?')
         ]),
         optionalQuestions = List.unmodifiable(<String>[]);
 
