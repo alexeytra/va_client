@@ -34,23 +34,12 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: action.changeAreOptionsQuestions);
 
-    case ChangeVisibilityInputAction:
-      return AppState(
-          messages: state.messages,
+    case ChangeVisibilityInputTypeAction:
+      return AppState(messages: state.messages,
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
-          visibilityFloating: state.visibilityInput,
-          visibilityInput: action.changeVisibilityInput,
-          typing: state.typing,
-          areOptionalQuestions: state.areOptionalQuestions);
-
-    case ChangeVisibilityFloatingAction:
-      return AppState(
-          messages: state.messages,
-          optionalQuestions: state.optionalQuestions,
-          listening: state.listening,
-          visibilityFloating: action.changeVisibilityFloating,
-          visibilityInput: state.visibilityInput,
+          visibilityFloating: action.visibilityFloating,
+          visibilityInput: action.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions);
 
@@ -106,9 +95,9 @@ AppState appStateReducer(AppState state, dynamic action) {
 
     case SendQuestionRequestAction:
       return AppState(
-          messages: [...state.messages]
-            ..add(Message(message: action.message, sender: 'USER'))
-            ..add(Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
+          messages: [...state.messages]..add(
+              Message(message: action.message, sender: 'USER'))..add(
+              Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
@@ -127,7 +116,7 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: false,
           audioAnswer: action.msgRes.audioAnswer,
           areOptionalQuestions:
-              action.msgRes.optionalQuestions.length > 0 ? true : false);
+          action.msgRes.optionalQuestions.length > 0 ? true : false);
 
     default:
       return state;

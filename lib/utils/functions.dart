@@ -2,9 +2,11 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 void getAudioAnswer(String url) async {
-  var player = AudioPlayer();
-  await player.play(url);
-  await player.monitorNotificationStateChanges(audioPlayerHandler);
+  if (url != '') {
+    var player = AudioPlayer();
+    await player.play(url);
+    await player.monitorNotificationStateChanges(audioPlayerHandler);
+  }
 }
 
 void getAudioIntro() async {

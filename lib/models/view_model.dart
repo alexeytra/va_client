@@ -21,28 +21,27 @@ class ViewModel {
   final Function() clearOptionalQuestions;
   final Function(List<String>) addOptionalQuestions;
   final Function(bool) changeAreOptionalQuestions;
-  final Function(bool) changeVisibilityFloating;
-  final Function(bool) changeVisibilityInput;
   final Function(String) sendMessage;
+  final Function(bool, bool) changeInputType;
 
-  ViewModel({
-    this.clearOptionalQuestions, this.addOptionalQuestions, this.changeAreOptionalQuestions,
-    this.listening,
-    this.visibilityFloating,
-    this.areOptionalQuestions,
-    this.messages,
-    this.typing,
-    this.changeListening,
-    this.addMessage,
-    this.changeTyping,
-    this.removeLastMessage,
-    this.visibilityInput,
-    this.changeVisibilityInput,
-    this.changeVisibilityFloating,
-    this.optionalQuestions,
-    this.sendMessage,
-    this.audioAnswer
-  });
+  ViewModel(
+      {this.clearOptionalQuestions,
+      this.addOptionalQuestions,
+      this.changeAreOptionalQuestions,
+      this.listening,
+      this.visibilityFloating,
+      this.areOptionalQuestions,
+      this.messages,
+      this.typing,
+      this.changeListening,
+      this.addMessage,
+      this.changeTyping,
+      this.removeLastMessage,
+      this.visibilityInput,
+      this.optionalQuestions,
+      this.sendMessage,
+      this.audioAnswer,
+      this.changeInputType});
 
   factory ViewModel.create(Store<AppState> store) {
     void _onChangeListening(bool listening) {
@@ -72,37 +71,32 @@ class ViewModel {
     void _onChangeAreOptionalQuestions(bool areOptQuestions) {
       store.dispatch(ChangeAreOptionalQuestionsAction(areOptQuestions));
     }
-    
-    void _onChangeVisibilityFloating(bool visibilityFloating) {
-      store.dispatch(ChangeVisibilityFloatingAction(visibilityFloating));
+
+    void _onChangeInputType(bool visibilityInput, bool visibilityFloating) {
+      store.dispatch(
+          ChangeVisibilityInputTypeAction(visibilityInput, visibilityFloating));
     }
 
-    void _onChangeVisibilityInput(bool visibilityInput) {
-      store.dispatch(ChangeVisibilityInputAction(visibilityInput));
-    }
-    
     return ViewModel(
-        listening: store.state.listening,
-        messages: store.state.messages,
-        visibilityFloating: store.state.visibilityFloating,
-        typing: store.state.typing,
-        areOptionalQuestions: store.state.areOptionalQuestions,
-        visibilityInput: store.state.visibilityInput,
-        optionalQuestions: store.state.optionalQuestions,
-        audioAnswer: store.state.audioAnswer,
-        sendMessage: (String message) {
-          store.dispatch(sendQuestionAction(message));
-        },
-
-        changeVisibilityFloating: _onChangeVisibilityFloating,
-        changeListening: _onChangeListening,
-        addMessage: _onAddMessage,
-        changeTyping: _onChangeTyping,
-        removeLastMessage: _onRemoveLastMessage,
-        clearOptionalQuestions: _onClearOptionalQuestions,
-        addOptionalQuestions: _onAddOptionalQuestions,
-        changeAreOptionalQuestions: _onChangeAreOptionalQuestions,
-        changeVisibilityInput: _onChangeVisibilityInput,
+      listening: store.state.listening,
+      messages: store.state.messages,
+      visibilityFloating: store.state.visibilityFloating,
+      typing: store.state.typing,
+      areOptionalQuestions: store.state.areOptionalQuestions,
+      visibilityInput: store.state.visibilityInput,
+      optionalQuestions: store.state.optionalQuestions,
+      audioAnswer: store.state.audioAnswer,
+      sendMessage: (String message) {
+        store.dispatch(sendQuestionAction(message));
+      },
+      changeListening: _onChangeListening,
+      addMessage: _onAddMessage,
+      changeTyping: _onChangeTyping,
+      removeLastMessage: _onRemoveLastMessage,
+      clearOptionalQuestions: _onClearOptionalQuestions,
+      addOptionalQuestions: _onAddOptionalQuestions,
+      changeAreOptionalQuestions: _onChangeAreOptionalQuestions,
+      changeInputType: _onChangeInputType,
     );
   }
 }

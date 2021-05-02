@@ -27,7 +27,11 @@ class ShowOptionalQuestions extends StatelessWidget {
                             label: Text(optionalQuestion,
                                 style: TextStyle(fontSize: 16)),
                             onSelected: (question) {
-                              viewModel.sendMessage(optionalQuestion);
+                              if (optionalQuestion != '👎') {
+                                viewModel.sendMessage(optionalQuestion);
+                              } else {
+                                print('fdf');
+                              }
                             },
                           )))
                       .toList(),
