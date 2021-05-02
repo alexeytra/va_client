@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:va_client/models/message_model.dart';
@@ -8,7 +9,9 @@ class ShowMessage extends StatelessWidget {
   final typing;
 
   ShowMessage(
-      {@required this.isMe, @required this.message, @required this.typing});
+      {@required this.isMe,
+      @required this.message,
+      @required this.typing});
 
   @override
   Widget build(BuildContext context) {

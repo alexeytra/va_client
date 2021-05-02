@@ -107,25 +107,27 @@ AppState appStateReducer(AppState state, dynamic action) {
     case SendQuestionRequestAction:
       return AppState(
           messages: [...state.messages]
+            ..add(Message(message: action.message, sender: 'USER'))
             ..add(Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
           visibilityInput: state.visibilityInput,
           typing: true,
-          areOptionalQuestions: state.areOptionalQuestions);
+          areOptionalQuestions: state.areOptionalQuestions && false);
 
     case SendQuestionCompletedAction:
       return AppState(
           messages: ([...state.messages]..removeLast())
-            ..add(action.msg),
-          optionalQuestions: state.optionalQuestions,
+            ..add(action.msgRes.message),
+          optionalQuestions: action.msgRes.optionalQuestions,
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
           visibilityInput: state.visibilityInput,
           typing: false,
-          areOptionalQuestions: state.areOptionalQuestions);
-
+          audioAnswer: action.msgRes.audioAnswer,
+          areOptionalQuestions:
+              action.msgRes.optionalQuestions.length > 0 ? true : false);
 
     default:
       return state;

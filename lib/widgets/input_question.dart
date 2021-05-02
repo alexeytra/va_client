@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/view_model.dart';
 
 class InputQuestion extends StatelessWidget {
-  final textFieldController;
+  final _textFieldController = TextEditingController();
   final ViewModel viewModel;
 
-  InputQuestion({@required this.textFieldController, @required this.viewModel});
+  InputQuestion({@required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +35,14 @@ class InputQuestion extends StatelessWidget {
                     ),
                     Expanded(
                         child: TextField(
-                      controller: textFieldController,
+                      controller: _textFieldController,
                       decoration: InputDecoration(hintText: 'Введите вопрос'),
                     )),
                     IconButton(
                       icon: Icon(Icons.send),
                       onPressed: () {
-                        viewModel.addMessage(Message(
-                            message: textFieldController.text, sender: 'USER'));
-                        viewModel.sendMessage(textFieldController.text);
-                        textFieldController.text = '';
+                        viewModel.sendMessage(_textFieldController.text);
+                        _textFieldController.text = '';
                       },
                       color: Theme.of(context).primaryColor,
                     )

@@ -1,7 +1,9 @@
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:va_client/models/message_model.dart';
+import 'package:va_client/models/message_response.dart';
 import 'package:va_client/services/message_service.dart';
+import 'package:va_client/utils/functions.dart';
 
 // add
 class AddMessageAction {
@@ -63,22 +65,25 @@ class ChangeAreOptionalQuestionsAction {
 }
 
 class SendQuestionRequestAction {
-  SendQuestionRequestAction();
+  String message;
+
+  SendQuestionRequestAction(this.message);
 }
 
 class SendQuestionCompletedAction {
-  final Message msg;
+  final MessageResponse msgRes;
 
-  SendQuestionCompletedAction(this.msg);
+  SendQuestionCompletedAction(this.msgRes);
 }
 
 ThunkAction sendQuestionAction(String message) {
   return (Store store) async {
     await Future(() async {
-      store.dispatch(SendQuestionRequestAction());
-      await sendQuestion(message).then((msg) {
+      store.dispatch(SendQuestionRequestAction(message));
+      await sendQuestion(message).then((msgRes) {
         Future.delayed(const Duration(seconds: 1), () {
-          store.dispatch(SendQuestionCompletedAction(msg));
+          store.dispatch(SendQuestionCompletedAction(msgRes));
+          getAudioAnswer(msgRes.audioAnswer);
         });
       }, onError: (error) => store.dispatch(AddMessageAction(Message(message: 'Что-то пошло не так 😁', sender: 'VA'))));
     });

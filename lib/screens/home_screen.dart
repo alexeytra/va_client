@@ -1,11 +1,10 @@
-import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/models/message_model.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/app_state.dart';
+import 'package:va_client/utils/functions.dart';
 import 'package:va_client/widgets/input_question.dart';
 import 'package:va_client/widgets/show_message.dart';
 import 'package:va_client/widgets/show_optional_questions.dart';
@@ -16,26 +15,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  stt.SpeechToText _speechToText;
-  String _text = '';
-  final textFieldController = TextEditingController();
-  final _scrollController = ScrollController();
 
-  AudioPlayer _audioPlayer;
-  AudioCache _audioCache;
+  final _scrollController = ScrollController();
+  String _text = '';
+
+  stt.SpeechToText _speechToText;
 
   @override
   void initState() {
     super.initState();
     _speechToText = stt.SpeechToText();
-    _getAudioIntro();
-  }
-
-  void _getAudioIntro() async {
-    _audioPlayer = AudioPlayer();
-    _audioCache = AudioCache(fixedPlayer: _audioPlayer);
-    await _audioCache.load('intro.mp3');
-    await _audioCache.play('intro.mp3');
+    getAudioIntro();
   }
 
   @override
@@ -121,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Visibility(
                       visible: viewModel.areOptionalQuestions,
                       child: ShowOptionalQuestions(viewModel: viewModel,)),
-                  InputQuestion(textFieldController: textFieldController, viewModel: viewModel)
+                  InputQuestion(viewModel: viewModel)
                 ],
               ),
           ),
@@ -151,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (viewModel.listening) {
       viewModel.changeListening(false);
       if (_text != '') {
-        viewModel.addMessage(Message(message: _text, sender: 'USER'));
         viewModel.sendMessage(_text);
       }
       setState(() {

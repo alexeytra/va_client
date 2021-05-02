@@ -1,7 +1,6 @@
 import 'package:redux/redux.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
-import 'package:va_client/services/message_service.dart';
 
 import 'message_model.dart';
 
@@ -13,6 +12,7 @@ class ViewModel {
   final bool typing;
   final bool visibilityInput;
   final List<String> optionalQuestions;
+  final String audioAnswer;
 
   final Function(bool) changeListening;
   final Function(Message) addMessage;
@@ -40,7 +40,8 @@ class ViewModel {
     this.changeVisibilityInput,
     this.changeVisibilityFloating,
     this.optionalQuestions,
-    this.sendMessage
+    this.sendMessage,
+    this.audioAnswer
   });
 
   factory ViewModel.create(Store<AppState> store) {
@@ -88,6 +89,7 @@ class ViewModel {
         areOptionalQuestions: store.state.areOptionalQuestions,
         visibilityInput: store.state.visibilityInput,
         optionalQuestions: store.state.optionalQuestions,
+        audioAnswer: store.state.audioAnswer,
         sendMessage: (String message) {
           store.dispatch(sendQuestionAction(message));
         },

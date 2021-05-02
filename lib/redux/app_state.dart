@@ -1,14 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:va_client/models/message_model.dart';
 
+@immutable
 class AppState {
   final List<Message> messages;
-  List<String> optionalQuestions;
-  bool listening = false;
-  bool visibilityFloating = true;
-  bool visibilityInput = false;
-  bool typing = false;
-  bool areOptionalQuestions = false;
+  final List<String> optionalQuestions;
+  final bool listening;
+  final bool visibilityFloating;
+  final bool visibilityInput;
+  final bool typing;
+  final bool areOptionalQuestions;
+  final String audioAnswer;
 
   AppState(
       {@required this.messages,
@@ -17,7 +19,8 @@ class AppState {
       @required this.visibilityFloating,
       @required this.visibilityInput,
       @required this.typing,
-      @required this.areOptionalQuestions});
+      @required this.areOptionalQuestions,
+      this.audioAnswer});
 
   AppState.initialState()
       : messages = List.unmodifiable(<Message>[
@@ -27,10 +30,16 @@ class AppState {
                   'Привет! Я - Виртуальный ассистент, Ваш верный помощник. '
                   'Чем могу помочь?')
         ]),
-        optionalQuestions = List.unmodifiable(<String>[]);
+        optionalQuestions = List.unmodifiable(<String>[]),
+        listening = false,
+        visibilityFloating = true,
+        visibilityInput = false,
+        typing = false,
+        areOptionalQuestions = false,
+        audioAnswer = null;
 
   @override
   String toString() {
-    return 'AppState{messages: $messages, optionalQuestions: $optionalQuestions, listening: $listening, visibilityFloatingAction: $visibilityFloating, visibilityInput: $visibilityInput, typing: $typing, areOptionalQuestions: $areOptionalQuestions}';
+    return 'AppState{messages: $messages, optionalQuestions: $optionalQuestions, listening: $listening, visibilityFloating: $visibilityFloating, visibilityInput: $visibilityInput, typing: $typing, areOptionalQuestions: $areOptionalQuestions, audioAnswer: $audioAnswer}';
   }
 }

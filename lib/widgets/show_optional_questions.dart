@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/view_model.dart';
@@ -28,11 +27,7 @@ class ShowOptionalQuestions extends StatelessWidget {
                             label: Text(optionalQuestion,
                                 style: TextStyle(fontSize: 16)),
                             onSelected: (question) {
-                              viewModel.changeAreOptionalQuestions(false);
-                              viewModel.addMessage(Message(
-                                  message: optionalQuestion, sender: 'USER'));
-                              // textFieldController.text = '';
-                              // _getAnswer();
+                              viewModel.sendMessage(optionalQuestion);
                             },
                           )))
                       .toList(),
