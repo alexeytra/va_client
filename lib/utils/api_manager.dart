@@ -1,4 +1,4 @@
-import 'CustomException.dart';
+import 'custom_exception.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'dart:convert';
@@ -8,24 +8,17 @@ class APIManager {
   static final api = 'http://127.0.0.1:5000/va/api/v1/';
 
   static Future<dynamic> sendQuestionApi(Map param) async {
-    var responseJson;
-    try {
-      final response = await http.post(api + 'question/text',
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(param));
-      responseJson = _response(response);
-    } on SocketException {
-      throw FetchDataException('No Internet connection');
-    }
-    return responseJson;
+    return post(param, 'question/text');
   }
 
   static Future<dynamic> sendWrongAnswer(Map param) async {
+    return post(param, 'answer/wrong');
+  }
+
+  static dynamic post(Map param, String endpoint) async {
     var responseJson;
     try {
-      final response = await http.post(api + 'question/text',
+      final response = await http.post(api + endpoint,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -33,6 +26,8 @@ class APIManager {
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
+    } catch(e) {
+      print('Error ' + e.toString());
     }
     return responseJson;
   }

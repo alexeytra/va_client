@@ -20,7 +20,7 @@ class ViewModel {
   final Function() removeLastMessage;
   final Function(String) sendMessage;
   final Function(bool, bool) changeInputType;
-  final Function(List<Message>, String) sendWrongAnswer;
+  final Function(List<Message>, String, String) sendWrongAnswer;
 
   ViewModel(
       {this.listening,
@@ -78,8 +78,8 @@ class ViewModel {
       changeTyping: _onChangeTyping,
       removeLastMessage: _onRemoveLastMessage,
       changeInputType: _onChangeInputType,
-        sendWrongAnswer: (List<Message> messages, String userId) {
-        store.dispatch(sendWrongAnswer(messages, userId));
+        sendWrongAnswer: (List<Message> messages, String msg, String userId) {
+        store.dispatch(sendWrongAnswerAction(messages, msg, userId));
       }
     );
   }

@@ -73,10 +73,10 @@ ThunkAction sendQuestionAction(String message) {
   };
 }
 
-ThunkAction sendWrongAnswerAction(List<Message> messages, String userId) {
+ThunkAction sendWrongAnswerAction(List<Message> messages, String msg, String userId) {
   return (Store store) async {
     await Future(() async {
-      store.dispatch(SendQuestionRequestAction(messages.last.message));
+      store.dispatch(SendQuestionRequestAction(msg));
       await sendWrongAnswer(messages, userId).then((response) {
         store.dispatch(SendQuestionCompletedAction(response));
         getAudioAnswer(response.audioAnswer);

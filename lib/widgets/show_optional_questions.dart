@@ -27,12 +27,14 @@ class ShowOptionalQuestions extends StatelessWidget {
                             label: Text(optionalQuestion,
                                 style: TextStyle(fontSize: 16)),
                             onSelected: (question) {
-                              if (optionalQuestion != '👎') {
+                              if (optionalQuestion != '👎' && optionalQuestion != '👍') {
                                 viewModel.sendMessage(optionalQuestion);
-                              } else if (optionalQuestion != '👍'){
+                              } else if (optionalQuestion == '👍'){
                                 print('fdf');
                               } else {
-
+                                var dialog = viewModel.messages.getRange(viewModel.messages.length - 2, viewModel.messages.length).toList();
+                                // print(dialog.toString());
+                                viewModel.sendWrongAnswer(dialog, '👎', '5263');
                               }
                             },
                           )))

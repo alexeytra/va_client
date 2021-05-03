@@ -1,5 +1,7 @@
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:va_client/models/message_model.dart';
+import 'package:va_client/models/message_response.dart';
 
 void getAudioAnswer(String url) async {
   if (url != '') {
@@ -18,3 +20,14 @@ void getAudioIntro() async {
 }
 
 void audioPlayerHandler(AudioPlayerState value) => null;
+
+MessageResponse getResponseObject(int statusCode, dynamic response) {
+  if (statusCode == 200) {
+    return MessageResponse.fromJson(response);
+  } else {
+    return MessageResponse(
+        message: Message(
+            message: 'Что-то пошло не так 😁 Попробуйте позже', sender: 'VA'),
+        optionalQuestions: []);
+  }
+}
