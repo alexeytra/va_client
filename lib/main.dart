@@ -16,8 +16,6 @@ void main() {
       LoggingMiddleware.printer()
     ],
   );
-  print('Initial state: ${store.state.visibilityInput}');
-
   runApp(StoreProvider(store: store, child: MyApp()));
 }
 

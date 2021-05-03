@@ -5,37 +5,30 @@ import 'package:va_client/models/message_response.dart';
 import 'package:va_client/services/message_service.dart';
 import 'package:va_client/utils/functions.dart';
 
-// add
 class AddMessageAction {
   final Message addedMessage;
 
   AddMessageAction(this.addedMessage);
 }
 
-// add
 class ProcessTypingAction {
   final bool processTyping;
 
   ProcessTypingAction(this.processTyping);
 }
 
-//add
 class ChangeAreOptionsQuestionsAction {
   final bool changeAreOptionsQuestions;
 
   ChangeAreOptionsQuestionsAction(this.changeAreOptionsQuestions);
 }
 
-class ChangeVisibilityInputAction {
-  final bool changeVisibilityInput;
+class ChangeVisibilityInputTypeAction {
+  final bool visibilityInput;
+  final bool visibilityFloating;
 
-  ChangeVisibilityInputAction(this.changeVisibilityInput);
-}
-
-class ChangeVisibilityFloatingAction {
-  final bool changeVisibilityFloating;
-
-  ChangeVisibilityFloatingAction(this.changeVisibilityFloating);
+  ChangeVisibilityInputTypeAction(
+      this.visibilityInput, this.visibilityFloating);
 }
 
 class ChangeListeningAction {
@@ -46,22 +39,6 @@ class ChangeListeningAction {
 
 class RemoveLastMessageAction {
   RemoveLastMessageAction();
-}
-
-class ClearOptionalQuestionsAction {
-  ClearOptionalQuestionsAction();
-}
-
-class AddOptionalQuestionsAction {
-  final List<String> areOptionalQuestions;
-
-  AddOptionalQuestionsAction(this.areOptionalQuestions);
-}
-
-class ChangeAreOptionalQuestionsAction {
-  final bool changeAreOptionalQuestions;
-
-  ChangeAreOptionalQuestionsAction(this.changeAreOptionalQuestions);
 }
 
 class SendQuestionRequestAction {
@@ -85,8 +62,30 @@ ThunkAction sendQuestionAction(String message) {
           store.dispatch(SendQuestionCompletedAction(msgRes));
           getAudioAnswer(msgRes.audioAnswer);
         });
-      }, onError: (error) => store.dispatch(AddMessageAction(Message(message: 'Что-то пошло не так 😁', sender: 'VA'))));
+      }, onError: (error) {
+        store.dispatch(SendQuestionCompletedAction(MessageResponse(
+            message: Message(
+                message: 'Что-то пошло не так 😁. Попробуйте позже', sender: 'VA'),
+            optionalQuestions: [])));
+      });
     });
     // store.dispatch(action) экшн для печатания сообщения
+  };
+}
+
+ThunkAction sendWrongAnswerAction(List<Message> messages, String msg, String userId) {
+  return (Store store) async {
+    await Future(() async {
+      store.dispatch(SendQuestionRequestAction(msg));
+      await sendWrongAnswer(messages, userId).then((response) {
+        store.dispatch(SendQuestionCompletedAction(response));
+        getAudioAnswer(response.audioAnswer);
+      }, onError: (error) {
+        store.dispatch(SendQuestionCompletedAction(MessageResponse(
+            message: Message(
+                message: 'Что-то пошло не так 😁. Попробуйте позже', sender: 'VA'),
+            optionalQuestions: [])));
+      });
+    });
   };
 }

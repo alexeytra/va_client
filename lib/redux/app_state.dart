@@ -27,15 +27,14 @@ class AppState {
           Message(
               sender: 'VA',
               message:
-                  'Привет! Я - Виртуальный ассистент, Ваш верный помощник. '
-                  'Чем могу помочь?')
+                  'Добрый день! Я - Виртуальный ассистент. Чем могу помочь?')
         ]),
-        optionalQuestions = List.unmodifiable(<String>[]),
+        optionalQuestions = List.unmodifiable(<String>['👍', '👎', 'Привет']),
         listening = false,
         visibilityFloating = true,
         visibilityInput = false,
         typing = false,
-        areOptionalQuestions = false,
+        areOptionalQuestions = true,
         audioAnswer = null;
 
   @override

@@ -110,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       visible: viewModel.listening, child: _showUserQuestion()),
                   Visibility(
                       visible: viewModel.areOptionalQuestions,
+                      // visible: viewModel.areOptionalQuestions && viewModel.messages.length != 1,
                       child: ShowOptionalQuestions(viewModel: viewModel,)),
                   InputQuestion(viewModel: viewModel)
                 ],

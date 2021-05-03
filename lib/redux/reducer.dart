@@ -34,23 +34,13 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: action.changeAreOptionsQuestions);
 
-    case ChangeVisibilityInputAction:
+    case ChangeVisibilityInputTypeAction:
       return AppState(
           messages: state.messages,
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
-          visibilityFloating: state.visibilityInput,
-          visibilityInput: action.changeVisibilityInput,
-          typing: state.typing,
-          areOptionalQuestions: state.areOptionalQuestions);
-
-    case ChangeVisibilityFloatingAction:
-      return AppState(
-          messages: state.messages,
-          optionalQuestions: state.optionalQuestions,
-          listening: state.listening,
-          visibilityFloating: action.changeVisibilityFloating,
-          visibilityInput: state.visibilityInput,
+          visibilityFloating: action.visibilityFloating,
+          visibilityInput: action.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions);
 
@@ -74,36 +64,6 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions);
 
-    case ClearOptionalQuestionsAction:
-      return AppState(
-          messages: state.messages,
-          optionalQuestions: [],
-          listening: state.listening,
-          visibilityFloating: state.visibilityFloating,
-          visibilityInput: state.visibilityInput,
-          typing: state.typing,
-          areOptionalQuestions: state.areOptionalQuestions);
-
-    case AddOptionalQuestionsAction:
-      return AppState(
-          messages: state.messages,
-          optionalQuestions: [...action.areOptionalQuestions],
-          listening: state.listening,
-          visibilityFloating: state.visibilityFloating,
-          visibilityInput: state.visibilityInput,
-          typing: state.typing,
-          areOptionalQuestions: state.areOptionalQuestions);
-
-    case ChangeAreOptionalQuestionsAction:
-      return AppState(
-          messages: state.messages,
-          optionalQuestions: state.optionalQuestions,
-          listening: state.listening,
-          visibilityFloating: state.visibilityFloating,
-          visibilityInput: state.visibilityInput,
-          typing: state.typing,
-          areOptionalQuestions: action.changeAreOptionalQuestions);
-
     case SendQuestionRequestAction:
       return AppState(
           messages: [...state.messages]
@@ -120,7 +80,9 @@ AppState appStateReducer(AppState state, dynamic action) {
       return AppState(
           messages: ([...state.messages]..removeLast())
             ..add(action.msgRes.message),
-          optionalQuestions: action.msgRes.optionalQuestions,
+          optionalQuestions: []
+            ..addAll(['👍', '👎'])
+            ..addAll(action.msgRes.optionalQuestions),
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
           visibilityInput: state.visibilityInput,

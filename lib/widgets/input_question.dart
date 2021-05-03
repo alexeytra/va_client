@@ -28,8 +28,7 @@ class InputQuestion extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.mic),
                       onPressed: () {
-                        viewModel.changeVisibilityFloating(true);
-                        viewModel.changeVisibilityInput(false);
+                        viewModel.changeInputType(false, true);
                       },
                       color: Theme.of(context).primaryColor,
                     ),
@@ -55,8 +54,7 @@ class InputQuestion extends StatelessWidget {
                       child: IconButton(
                         icon: Icon(Icons.keyboard),
                         onPressed: () {
-                          viewModel.changeVisibilityInput(true);
-                          viewModel.changeVisibilityFloating(false);
+                          viewModel.changeInputType(true, false);
                         },
                         color: Theme.of(context).primaryColor,
                       ),
