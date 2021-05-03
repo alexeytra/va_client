@@ -18,17 +18,12 @@ class ViewModel {
   final Function(Message) addMessage;
   final Function(bool) changeTyping;
   final Function() removeLastMessage;
-  final Function() clearOptionalQuestions;
-  final Function(List<String>) addOptionalQuestions;
-  final Function(bool) changeAreOptionalQuestions;
   final Function(String) sendMessage;
   final Function(bool, bool) changeInputType;
+  final Function(List<Message>, String) sendWrongAnswer;
 
   ViewModel(
-      {this.clearOptionalQuestions,
-      this.addOptionalQuestions,
-      this.changeAreOptionalQuestions,
-      this.listening,
+      {this.listening,
       this.visibilityFloating,
       this.areOptionalQuestions,
       this.messages,
@@ -41,6 +36,7 @@ class ViewModel {
       this.optionalQuestions,
       this.sendMessage,
       this.audioAnswer,
+      this.sendWrongAnswer,
       this.changeInputType});
 
   factory ViewModel.create(Store<AppState> store) {
@@ -58,18 +54,6 @@ class ViewModel {
 
     void _onRemoveLastMessage() {
       store.dispatch(RemoveLastMessageAction());
-    }
-
-    void _onClearOptionalQuestions() {
-      store.dispatch(ClearOptionalQuestionsAction());
-    }
-
-    void _onAddOptionalQuestions(List<String> optQuestions) {
-      store.dispatch(AddOptionalQuestionsAction(optQuestions));
-    }
-
-    void _onChangeAreOptionalQuestions(bool areOptQuestions) {
-      store.dispatch(ChangeAreOptionalQuestionsAction(areOptQuestions));
     }
 
     void _onChangeInputType(bool visibilityInput, bool visibilityFloating) {
@@ -93,10 +77,10 @@ class ViewModel {
       addMessage: _onAddMessage,
       changeTyping: _onChangeTyping,
       removeLastMessage: _onRemoveLastMessage,
-      clearOptionalQuestions: _onClearOptionalQuestions,
-      addOptionalQuestions: _onAddOptionalQuestions,
-      changeAreOptionalQuestions: _onChangeAreOptionalQuestions,
       changeInputType: _onChangeInputType,
+        sendWrongAnswer: (List<Message> messages, String userId) {
+        store.dispatch(sendWrongAnswer(messages, userId));
+      }
     );
   }
 }

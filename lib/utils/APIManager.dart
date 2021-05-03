@@ -5,11 +5,25 @@ import 'dart:convert';
 import 'dart:async';
 
 class APIManager {
-  final api = 'http://127.0.0.1:5000/va/api/v1/';
+  static final api = 'http://127.0.0.1:5000/va/api/v1/';
 
-  Future<dynamic> sendQuestionApi(Map param) async {
+  static Future<dynamic> sendQuestionApi(Map param) async {
     var responseJson;
-    print('param' + param.toString());
+    try {
+      final response = await http.post(api + 'question/text',
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(param));
+      responseJson = _response(response);
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    }
+    return responseJson;
+  }
+
+  static Future<dynamic> sendWrongAnswer(Map param) async {
+    var responseJson;
     try {
       final response = await http.post(api + 'question/text',
           headers: <String, String>{
@@ -24,7 +38,7 @@ class APIManager {
   }
 
 
-  dynamic _response(http.Response response) {
+  static dynamic _response(http.Response response) {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body.toString());

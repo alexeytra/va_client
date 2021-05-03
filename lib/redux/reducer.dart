@@ -35,7 +35,8 @@ AppState appStateReducer(AppState state, dynamic action) {
           areOptionalQuestions: action.changeAreOptionsQuestions);
 
     case ChangeVisibilityInputTypeAction:
-      return AppState(messages: state.messages,
+      return AppState(
+          messages: state.messages,
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
           visibilityFloating: action.visibilityFloating,
@@ -63,41 +64,11 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions);
 
-    case ClearOptionalQuestionsAction:
-      return AppState(
-          messages: state.messages,
-          optionalQuestions: [],
-          listening: state.listening,
-          visibilityFloating: state.visibilityFloating,
-          visibilityInput: state.visibilityInput,
-          typing: state.typing,
-          areOptionalQuestions: state.areOptionalQuestions);
-
-    case AddOptionalQuestionsAction:
-      return AppState(
-          messages: state.messages,
-          optionalQuestions: [...action.areOptionalQuestions],
-          listening: state.listening,
-          visibilityFloating: state.visibilityFloating,
-          visibilityInput: state.visibilityInput,
-          typing: state.typing,
-          areOptionalQuestions: state.areOptionalQuestions);
-
-    case ChangeAreOptionalQuestionsAction:
-      return AppState(
-          messages: state.messages,
-          optionalQuestions: state.optionalQuestions,
-          listening: state.listening,
-          visibilityFloating: state.visibilityFloating,
-          visibilityInput: state.visibilityInput,
-          typing: state.typing,
-          areOptionalQuestions: action.changeAreOptionalQuestions);
-
     case SendQuestionRequestAction:
       return AppState(
-          messages: [...state.messages]..add(
-              Message(message: action.message, sender: 'USER'))..add(
-              Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
+          messages: [...state.messages]
+            ..add(Message(message: action.message, sender: 'USER'))
+            ..add(Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
@@ -109,14 +80,16 @@ AppState appStateReducer(AppState state, dynamic action) {
       return AppState(
           messages: ([...state.messages]..removeLast())
             ..add(action.msgRes.message),
-          optionalQuestions: action.msgRes.optionalQuestions,
+          optionalQuestions: []
+            ..addAll(['👍', '👎'])
+            ..addAll(action.msgRes.optionalQuestions),
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
           visibilityInput: state.visibilityInput,
           typing: false,
           audioAnswer: action.msgRes.audioAnswer,
           areOptionalQuestions:
-          action.msgRes.optionalQuestions.length > 0 ? true : false);
+              action.msgRes.optionalQuestions.length > 0 ? true : false);
 
     default:
       return state;

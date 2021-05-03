@@ -41,22 +41,6 @@ class RemoveLastMessageAction {
   RemoveLastMessageAction();
 }
 
-class ClearOptionalQuestionsAction {
-  ClearOptionalQuestionsAction();
-}
-
-class AddOptionalQuestionsAction {
-  final List<String> areOptionalQuestions;
-
-  AddOptionalQuestionsAction(this.areOptionalQuestions);
-}
-
-class ChangeAreOptionalQuestionsAction {
-  final bool changeAreOptionalQuestions;
-
-  ChangeAreOptionalQuestionsAction(this.changeAreOptionalQuestions);
-}
-
 class SendQuestionRequestAction {
   String message;
 
@@ -86,5 +70,22 @@ ThunkAction sendQuestionAction(String message) {
       });
     });
     // store.dispatch(action) экшн для печатания сообщения
+  };
+}
+
+ThunkAction sendWrongAnswerAction(List<Message> messages, String userId) {
+  return (Store store) async {
+    await Future(() async {
+      store.dispatch(SendQuestionRequestAction(messages.last.message));
+      await sendWrongAnswer(messages, userId).then((response) {
+        store.dispatch(SendQuestionCompletedAction(response));
+        getAudioAnswer(response.audioAnswer);
+      }, onError: (error) {
+        store.dispatch(SendQuestionCompletedAction(MessageResponse(
+            message: Message(
+                message: 'Что-то пошло не так 😁. Попробуйте позже', sender: 'VA'),
+            optionalQuestions: [])));
+      });
+    });
   };
 }
