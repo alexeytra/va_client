@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:va_client/models/message_model.dart';
@@ -30,4 +32,10 @@ MessageResponse getResponseObject(int statusCode, dynamic response) {
             message: 'Что-то пошло не так 😁 Попробуйте позже', sender: 'VA'),
         optionalQuestions: []);
   }
+}
+
+T getRandomElement<T>(List<T> list) {
+  final random = Random();
+  var i = random.nextInt(list.length);
+  return list[i];
 }
