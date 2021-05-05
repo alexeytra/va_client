@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/view_model.dart';
@@ -30,6 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  Future<void> didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    final prefs = await SharedPreferences.getInstance();
+    final voice = prefs.getBool('voice') ?? true;
+    print(voice);
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
@@ -39,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Theme.of(context).primaryColor,
           appBar: AppBar(
             title: Text(
-              'Виртуальный ассистент',
+              'Ассистент',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
