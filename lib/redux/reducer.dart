@@ -88,8 +88,7 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: state.visibilityInput,
           typing: false,
           audioAnswer: action.msgRes.audioAnswer,
-          areOptionalQuestions:
-              action.msgRes.optionalQuestions.length > 0 ? true : false);
+          areOptionalQuestions: true);
 
     default:
       return state;

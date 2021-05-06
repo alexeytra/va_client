@@ -3,10 +3,10 @@ import 'package:va_client/models/message_response.dart';
 import 'package:va_client/utils/api_manager.dart';
 import 'package:va_client/utils/functions.dart';
 
-Future<MessageResponse> sendQuestion(String message) async {
+Future<MessageResponse> sendQuestion(String message, bool voice, bool generateAnswer) async {
   var question = message.split('\s+');
   var response = await APIManager.sendQuestionApi(
-      {'question': question.take(10).join(' ')}).then((value) {
+      {'question': question.take(10).join(' '), 'voice': voice, 'generateAnswer': generateAnswer}).then((value) {
     return getResponseObject(value['status'], value['response']);
   }, onError: (error) {
     return Future.error(error);
