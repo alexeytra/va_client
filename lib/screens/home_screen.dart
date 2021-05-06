@@ -4,6 +4,7 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/app_state.dart';
+import 'package:va_client/screens/setting_screen.dart';
 import 'package:va_client/utils/functions.dart';
 import 'package:va_client/widgets/input_question.dart';
 import 'package:va_client/widgets/show_message.dart';
@@ -20,7 +21,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String _text = '';
 
   stt.SpeechToText _speechToText;
-
   @override
   void initState() {
     super.initState();
@@ -38,12 +38,17 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Theme.of(context).primaryColor,
           appBar: AppBar(
             title: Text(
-              'Виртуальный ассистент',
+              'Ассистент',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
             elevation: 0,
-            actions: [IconButton(icon: Icon(Icons.settings), onPressed: () {})],
+            actions: [IconButton(icon: Icon(Icons.settings), onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingScreen()),
+              );
+            })],
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,

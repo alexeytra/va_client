@@ -57,7 +57,8 @@ ThunkAction sendQuestionAction(String message) {
   return (Store store) async {
     await Future(() async {
       store.dispatch(SendQuestionRequestAction(message));
-      await sendQuestion(message).then((msgRes) {
+      var settings = await getSettingsFromSharedPreferences();
+      await sendQuestion(message, settings.voice, settings.generateAnswer).then((msgRes) {
         Future.delayed(const Duration(seconds: 1), () {
           store.dispatch(SendQuestionCompletedAction(msgRes));
           getAudioAnswer(msgRes.audioAnswer);

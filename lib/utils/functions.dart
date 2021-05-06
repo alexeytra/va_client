@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/message_response.dart';
+import 'package:va_client/models/settings_model.dart';
 
 void getAudioAnswer(String url) async {
   if (url != '') {
@@ -38,4 +40,12 @@ T getRandomElement<T>(List<T> list) {
   final random = Random();
   var i = random.nextInt(list.length);
   return list[i];
+}
+
+Future<Settings> getSettingsFromSharedPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+  final voice = prefs.getBool('voice') ?? true;
+  final generateAnswer = prefs.getBool('generateAnswer') ?? true;
+
+  return Settings(voice, generateAnswer);
 }

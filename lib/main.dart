@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
 
 
     return MaterialApp(
-          title: 'Виртуальный ассистент',
+          title: 'Ассистент',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primaryColor: Colors.orange[300],
