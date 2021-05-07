@@ -29,7 +29,7 @@ class AppState {
               message:
                   'Добрый день! Я - Виртуальный ассистент. Чем могу помочь?')
         ]),
-        optionalQuestions = List.unmodifiable(<String>['👍', '👎', 'Привет']),
+        optionalQuestions = List.unmodifiable(<String>['👍', '👎', 'Привет', 'Как дела']),
         listening = false,
         visibilityFloating = true,
         visibilityInput = false,

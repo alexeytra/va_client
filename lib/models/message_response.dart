@@ -5,9 +5,13 @@ class MessageResponse {
   final Message message;
   final List<String> optionalQuestions;
   final String audioAnswer;
+  final String additionalResponse;
 
   MessageResponse(
-      {this.message, this.optionalQuestions, this.audioAnswer = ''});
+      {this.message,
+      this.optionalQuestions,
+      this.audioAnswer = '',
+      this.additionalResponse});
 
   MessageResponse.fromJson(Map<String, dynamic> json)
       : message = Message(
@@ -18,7 +22,8 @@ class MessageResponse {
                 accuracy: json['accuracy'],
                 model: json['model'])),
         optionalQuestions = List<String>.from(json['optionalQuestions']),
-        audioAnswer = json['audioAnswer'];
+        audioAnswer = json['audioAnswer'],
+        additionalResponse = json['additionalResponse'];
 
   @override
   String toString() {
