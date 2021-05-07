@@ -63,6 +63,11 @@ ThunkAction sendQuestionAction(String message) {
           store.dispatch(SendQuestionCompletedAction(msgRes));
           getAudioAnswer(msgRes.audioAnswer);
         });
+        if (msgRes.additionalResponse != '') {
+          Future.delayed(const Duration(seconds: 3), () {
+            store.dispatch(AddMessageAction(Message(message: msgRes.additionalResponse, sender: 'VA')));
+          });
+        }
       }, onError: (error) {
         store.dispatch(SendQuestionCompletedAction(MessageResponse(
             message: Message(
