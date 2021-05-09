@@ -33,23 +33,12 @@ class ShowOptionalQuestions extends StatelessWidget {
                               optionalQuestion != '👍') {
                             viewModel.sendMessage(optionalQuestion);
                           } else if (optionalQuestion == '👍') {
-                            // TODO: Refactor this later
-                            var responses = [
-                              'Спасибо за поддержку!',
-                              'Спасибо, хвалите меня почаще',
-                              'Мне очень приятно, когда меня хвалят',
-                              'Спасибо за ваш положительный отклик'
-                            ];
-                            viewModel.addMessage(
-                                Message(message: '👍', sender: 'USER'));
-                            viewModel.addMessage(Message(
-                                message: getRandomElement(responses), sender: 'VA'));
+                            viewModel.sendMessage('👍');
                           } else {
                             var dialog = viewModel.messages
                                 .getRange(viewModel.messages.length - 2,
                                     viewModel.messages.length)
                                 .toList();
-                            // print(dialog.toString());
                             viewModel.sendWrongAnswer(dialog, '👎', '5263');
                           }
                         },
