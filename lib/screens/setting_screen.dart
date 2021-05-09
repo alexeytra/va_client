@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:va_client/screens/auth_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   @override
@@ -57,7 +58,12 @@ class _SettingScreenState extends State<SettingScreen> {
               ],
             ),
             // Text()
-            TextButton(onPressed: () {}, child: Text('Авторизация')),
+            TextButton(onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AuthScreen()),
+              );
+            }, child: Text('Авторизация')),
             TextButton(
               onPressed: () {},
               child: Text('Отправить отзыв'),
