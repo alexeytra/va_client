@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
@@ -7,7 +8,7 @@ import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/redux/reducer.dart';
 import 'package:va_client/screens/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
   final store = Store<AppState>(
     appStateReducer,
     initialState: AppState.initialState(),
@@ -16,6 +17,7 @@ void main() {
       LoggingMiddleware.printer()
     ],
   );
+  await DotEnv().load('.env');
   runApp(StoreProvider(store: store, child: MyApp()));
 }
 

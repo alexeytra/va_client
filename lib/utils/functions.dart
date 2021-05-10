@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:va_client/models/login_response.dart';
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/message_response.dart';
 import 'package:va_client/models/settings_model.dart';
@@ -25,7 +26,7 @@ void getAudioIntro() async {
 
 void audioPlayerHandler(AudioPlayerState value) => null;
 
-MessageResponse getResponseObject(int statusCode, dynamic response) {
+MessageResponse getMessageResponseObject(int statusCode, dynamic response) {
   if (statusCode == 200) {
     return MessageResponse.fromJson(response);
   } else {
@@ -33,6 +34,14 @@ MessageResponse getResponseObject(int statusCode, dynamic response) {
         message: Message(
             message: 'Что-то пошло не так 😁 Попробуйте позже', sender: 'VA'),
         optionalQuestions: []);
+  }
+}
+
+LoginResponse getLoginResponseObject(int statusCode, dynamic response) {
+  if (statusCode == 200) {
+    return LoginResponse.fromJson(response);
+  } else {
+    return null;
   }
 }
 

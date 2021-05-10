@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'custom_exception.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -11,8 +13,12 @@ class APIManager {
     return post(param, 'question/text');
   }
 
-  static Future<dynamic> sendWrongAnswer(Map param) async {
+  static Future<dynamic> sendWrongAnswerApi(Map param) async {
     return post(param, 'answer/wrong');
+  }
+
+  static Future<dynamic> loginApi(Map param) async {
+    return auth(param);
   }
 
   static dynamic post(Map param, String endpoint) async {
@@ -26,12 +32,38 @@ class APIManager {
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
-    } catch(e) {
+    } catch (e) {
       print('Error ' + e.toString());
     }
     return responseJson;
   }
 
+  static dynamic auth(Map param) async {
+    var queryParameters = {
+      'client_id': 'personal_office_mobile',
+      'client_secret': DotEnv().env['SECRET_KEY'],
+      'response_type': 'token',
+      'grant_type': 'password',
+      'scope': 'trust',
+      'username': param['userName'],
+      'password': param['password'],
+    };
+    var responseJson;
+
+    var uri =
+        Uri.https('https://esstu.ru/', 'auth/oauth/token', queryParameters);
+    try {
+      var response = await http.post(uri, headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      });
+      responseJson = _response(response);
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      print('Error ' + e.toString());
+    }
+    return responseJson;
+  }
 
   static dynamic _response(http.Response response) {
     switch (response.statusCode) {
@@ -47,8 +79,7 @@ class APIManager {
         return {'status': response.statusCode};
       default:
         throw FetchDataException(
-            'Error occurred while Communication with Server with StatusCode: ${response
-                .statusCode}');
+            'Error occurred while Communication with Server with StatusCode: ${response.statusCode}');
     }
   }
 }

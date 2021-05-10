@@ -6,6 +6,11 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+
+  final loginController = TextEditingController();
+  final passwordController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             SizedBox(height: 48.0),
             TextFormField(
+              controller: loginController,
               keyboardType: TextInputType.name,
               autofocus: true,
               decoration: InputDecoration(
@@ -36,6 +42,7 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             SizedBox(height: 10.0),
             TextFormField(
+              controller: passwordController,
               autofocus: true,
               obscureText: true,
               decoration: InputDecoration(
@@ -54,7 +61,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: MaterialButton(
                   minWidth: 200.0,
                   height: 42.0,
-                  onPressed: () {},
+                  onPressed: () {
+
+                  },
                   color: Colors.orangeAccent,
                   child: Text(
                     'Войти',
@@ -67,5 +76,13 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       ),
     );
+  }
+
+
+  @override
+  void dispose() {
+    loginController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
