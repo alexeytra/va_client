@@ -121,8 +121,9 @@ ThunkAction loginUser(String userName, String password) {
     await Future(() async {
       store.dispatch(StartLoadingAction());
       await login(userName, password).then((value) => {
-        print('login')
+        store.dispatch(LoginSuccessAction(value))
       }, onError: (error) {
+        store.dispatch(LoginFailedAction);
         print(error);
       });
     });

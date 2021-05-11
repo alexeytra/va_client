@@ -3,7 +3,7 @@ part 'login_response.g.dart';
 
 @JsonSerializable()
 class LoginResponse {
-  int userId;
+  String userId;
   String access_token;
   String refresh_token;
   int expires_in;
@@ -25,4 +25,9 @@ class LoginResponse {
   factory LoginResponse.fromJson(Map<String, dynamic> json) =>
       _$LoginResponseFromJson(json);
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
+
+  @override
+  String toString() {
+    return 'LoginResponse{userId: $userId, access_token: $access_token, refresh_token: $refresh_token, expires_in: $expires_in, lastName: $lastName, firstName: $firstName, patronymic: $patronymic, userType: $userType}';
+  }
 }

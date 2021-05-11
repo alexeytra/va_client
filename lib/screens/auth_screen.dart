@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:va_client/models/view_model.dart';
+import 'package:va_client/redux/app_state.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -13,66 +16,72 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Авторизация',
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          children: [
-            Icon(
-              Icons.auto_awesome,
-              size: 20.0,
-            ),
-            SizedBox(height: 48.0),
-            TextFormField(
-              controller: loginController,
-              keyboardType: TextInputType.name,
-              autofocus: true,
-              decoration: InputDecoration(
-                  hintText: 'Логин',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0))),
-            ),
-            SizedBox(height: 10.0),
-            TextFormField(
-              controller: passwordController,
-              autofocus: true,
-              obscureText: true,
-              decoration: InputDecoration(
-                  hintText: 'Пароль',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0))),
-            ),
-            SizedBox(height: 24.0),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                borderRadius: BorderRadius.circular(32.0),
-                clipBehavior: Clip.antiAlias,
-                shadowColor: Colors.orangeAccent.shade100,
-                child: MaterialButton(
-                  minWidth: 200.0,
-                  height: 42.0,
-                  onPressed: () {
-
-                  },
-                  color: Colors.orangeAccent,
-                  child: Text(
-                    'Войти',
-                    style: TextStyle(color: Colors.white),
+    loginController.text = 's81834';
+    passwordController.text = '28rjHELLO';
+    return StoreConnector<AppState, ViewModel>(
+      distinct: true,
+      converter: (store) => ViewModel.create(store),
+      builder: (context, ViewModel viewModel) => Scaffold(
+        appBar: AppBar(
+          title: Text('Авторизация',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+          centerTitle: true,
+          elevation: 0,
+        ),
+        body: Center(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(left: 24.0, right: 24.0),
+            children: [
+              Icon(
+                Icons.auto_awesome,
+                size: 20.0,
+              ),
+              SizedBox(height: 48.0),
+              TextFormField(
+                controller: loginController,
+                keyboardType: TextInputType.name,
+                autofocus: true,
+                decoration: InputDecoration(
+                    hintText: 'Логин',
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32.0))),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                controller: passwordController,
+                autofocus: true,
+                obscureText: true,
+                decoration: InputDecoration(
+                    hintText: 'Пароль',
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32.0))),
+              ),
+              SizedBox(height: 24.0),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  borderRadius: BorderRadius.circular(32.0),
+                  clipBehavior: Clip.antiAlias,
+                  shadowColor: Colors.orangeAccent.shade100,
+                  child: MaterialButton(
+                    minWidth: 200.0,
+                    height: 42.0,
+                    onPressed: () {
+                      viewModel.login(loginController.text, passwordController.text);
+                    },
+                    color: Colors.orangeAccent,
+                    child: Text(
+                      'Войти',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

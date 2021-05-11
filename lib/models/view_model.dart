@@ -90,6 +90,8 @@ class ViewModel {
         sendWrongAnswer: (List<Message> messages, String msg, String userId) {
           store.dispatch(sendWrongAnswerAction(messages, msg, userId));
         },
-        login: (String userName, String password) {});
+        login: (String userName, String password) {
+          store.dispatch(loginUser(userName, password));
+        });
   }
 }

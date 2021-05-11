@@ -39,21 +39,20 @@ class APIManager {
   }
 
   static dynamic auth(Map param) async {
-    var queryParameters = {
+    var responseJson;
+    var queryParameters = <String, String>{
       'client_id': 'personal_office_mobile',
-      'client_secret': DotEnv().env['SECRET_KEY'],
+      'client_secret': DotEnv().env['SECRET_KEY'].toString(),
       'response_type': 'token',
       'grant_type': 'password',
       'scope': 'trust',
       'username': param['userName'],
       'password': param['password'],
     };
-    var responseJson;
 
-    var uri =
-        Uri.https('https://esstu.ru/', 'auth/oauth/token', queryParameters);
+    var uri = Uri.https('esstu.ru', '/auth/oauth/token', queryParameters);
     try {
-      var response = await http.post(uri, headers: <String, String>{
+      var response = await http.post(uri, headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       });
       responseJson = _response(response);
