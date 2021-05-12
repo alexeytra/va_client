@@ -1,6 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:va_client/models/view_model.dart';
+import 'package:va_client/redux/app_state.dart';
+import 'package:va_client/services/message_service.dart';
 import 'home_screen.dart';
+import 'package:va_client/utils/functions.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -19,10 +24,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-      body: Center(
-        child: Image.asset('assets/5.gif'),
+    return StoreConnector<AppState, ViewModel>(
+      distinct: true,
+      onInit: (store) async {
+        var auth = await getAuthData();
+        if (auth != null) {
+          print('auth >>>>>> ' + auth.login + ' ' + auth.password);
+          store.dispatch(login(auth.login, auth.password));
+        }
+      },
+      converter: (store) => ViewModel.create(store),
+      builder: (context, ViewModel viewModel) => Scaffold(
+          backgroundColor: Colors.white,
+        body: Center(
+          child: Image.asset('assets/5.gif'),
+        ),
       ),
     );
   }

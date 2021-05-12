@@ -14,20 +14,23 @@ class AppState {
   final String audioAnswer;
   final bool isLoading;
   final bool loginError;
+  final isLogin;
   final LoginResponse user;
 
-  AppState(
-      {@required this.messages,
-      @required this.optionalQuestions,
-      @required this.listening,
-      @required this.visibilityFloating,
-      @required this.visibilityInput,
-      @required this.typing,
-      @required this.areOptionalQuestions,
-      this.isLoading,
-      this.loginError,
-      @required this.user,
-      this.audioAnswer});
+  AppState({
+    @required this.messages,
+    @required this.optionalQuestions,
+    @required this.listening,
+    @required this.visibilityFloating,
+    @required this.visibilityInput,
+    @required this.typing,
+    @required this.areOptionalQuestions,
+    this.isLoading,
+    this.loginError,
+    @required this.user,
+    this.audioAnswer,
+    this.isLogin,
+  });
 
   AppState.initialState()
       : messages = List.unmodifiable(<Message>[
@@ -46,10 +49,11 @@ class AppState {
         audioAnswer = null,
         isLoading = false,
         loginError = false,
+        isLogin = false,
         user = null;
 
   @override
   String toString() {
-    return 'AppState{messages: $messages, optionalQuestions: $optionalQuestions, listening: $listening, visibilityFloating: $visibilityFloating, visibilityInput: $visibilityInput, typing: $typing, areOptionalQuestions: $areOptionalQuestions, audioAnswer: $audioAnswer, isLoading: $isLoading, loginError: $loginError, user: $user}';
+    return 'AppState{messages: $messages, optionalQuestions: $optionalQuestions, listening: $listening, visibilityFloating: $visibilityFloating, visibilityInput: $visibilityInput, typing: $typing, areOptionalQuestions: $areOptionalQuestions, audioAnswer: $audioAnswer, isLoading: $isLoading, loginError: $loginError, isLogin: $isLogin, user: $user}';
   }
 }

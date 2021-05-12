@@ -16,6 +16,7 @@ class ViewModel {
   final String audioAnswer;
   final bool isLoading;
   final bool loginError;
+  final bool isLogin;
   final LoginResponse loginResponse;
 
   final Function(bool) changeListening;
@@ -46,6 +47,7 @@ class ViewModel {
       this.audioAnswer,
       this.sendWrongAnswer,
       this.changeInputType,
+      this.isLogin,
       this.login});
 
   factory ViewModel.create(Store<AppState> store) {
@@ -79,6 +81,7 @@ class ViewModel {
         visibilityInput: store.state.visibilityInput,
         optionalQuestions: store.state.optionalQuestions,
         audioAnswer: store.state.audioAnswer,
+        isLogin: store.state.isLogin,
         sendMessage: (String message) {
           store.dispatch(sendQuestionAction(message));
         },

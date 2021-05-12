@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:va_client/models/auth_data.dart';
 import 'package:va_client/models/login_response.dart';
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/message_response.dart';
@@ -57,4 +58,20 @@ Future<Settings> getSettingsFromSharedPreferences() async {
   final generateAnswer = prefs.getBool('generateAnswer') ?? true;
 
   return Settings(voice, generateAnswer);
+}
+
+void saveAuthData(String login, String password) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('login', login);
+  await prefs.setString('password', password);
+}
+
+Future<AuthData> getAuthData() async {
+  final prefs = await SharedPreferences.getInstance();
+  final login = prefs.getString('login') ?? '';
+  final password = prefs.getString('password') ?? '';
+  if (password == '' && login == '') {
+    return null;
+  }
+  return AuthData(login, password);
 }

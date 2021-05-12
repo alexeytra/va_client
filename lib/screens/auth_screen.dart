@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/app_state.dart';
 
@@ -69,7 +70,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: MaterialButton(
                     minWidth: 200.0,
                     height: 42.0,
-                    onPressed: () {
+                    onPressed: () async {
                       viewModel.login(loginController.text, passwordController.text);
                     },
                     color: Colors.orangeAccent,

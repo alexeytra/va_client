@@ -119,7 +119,7 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: state.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
-          user: action.user);
+          user: action.user, isLogin: true);
 
     case LoginFailedAction:
       return AppState(
