@@ -72,9 +72,9 @@ AppState appStateReducer(AppState state, dynamic action) {
 
     case SendQuestionRequestAction:
       return AppState(
-          messages: [...state.messages]
-            ..add(Message(message: action.message, sender: 'USER'))
-            ..add(Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
+          messages: [...state.messages]..add(
+              Message(message: action.message, sender: 'USER'))..add(
+              Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
@@ -87,9 +87,8 @@ AppState appStateReducer(AppState state, dynamic action) {
       return AppState(
           messages: ([...state.messages]..removeLast())
             ..add(action.msgRes.message),
-          optionalQuestions: []
-            ..addAll(['👍', '👎'])
-            ..addAll(action.msgRes.optionalQuestions),
+          optionalQuestions: []..addAll(['👍', '👎'])..addAll(
+              action.msgRes.optionalQuestions),
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
           visibilityInput: state.visibilityInput,
@@ -119,7 +118,8 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: state.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
-          user: action.user, isLogin: true);
+          user: action.user,
+          isLogin: true);
 
     case LoginFailedAction:
       return AppState(
@@ -132,6 +132,18 @@ AppState appStateReducer(AppState state, dynamic action) {
           areOptionalQuestions: state.areOptionalQuestions,
           user: state.user,
           loginError: true);
+
+    case LogoutAction:
+      return AppState(messages: state.messages,
+          optionalQuestions: state.optionalQuestions,
+          listening: state.listening,
+          visibilityFloating: state.visibilityFloating,
+          visibilityInput: state.visibilityInput,
+          typing: state.typing,
+          areOptionalQuestions: state.areOptionalQuestions,
+          user: null,
+          isLogin: false
+      );
 
     default:
       return state;

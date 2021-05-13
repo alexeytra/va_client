@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/view_model.dart';
+import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/services/message_service.dart';
 import 'home_screen.dart';
@@ -29,13 +31,12 @@ class _SplashScreenState extends State<SplashScreen> {
       onInit: (store) async {
         var auth = await getAuthData();
         if (auth != null) {
-          print('auth >>>>>> ' + auth.login + ' ' + auth.password);
-          store.dispatch(login(auth.login, auth.password));
+          store.dispatch(loginUser(auth.login, auth.password));
         }
       },
       converter: (store) => ViewModel.create(store),
       builder: (context, ViewModel viewModel) => Scaffold(
-          backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         body: Center(
           child: Image.asset('assets/5.gif'),
         ),

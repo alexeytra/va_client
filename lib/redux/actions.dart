@@ -70,6 +70,10 @@ class LoginFailedAction {
   LoginFailedAction();
 }
 
+class LogoutAction {
+  LogoutAction();
+}
+
 
 // Thunks
 

@@ -26,6 +26,10 @@ class LoginResponse {
       _$LoginResponseFromJson(json);
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 
+  String getName() {
+    return lastName + ' ' + firstName + ' ' + patronymic;
+  }
+
   @override
   String toString() {
     return 'LoginResponse{userId: $userId, access_token: $access_token, refresh_token: $refresh_token, expires_in: $expires_in, lastName: $lastName, firstName: $firstName, patronymic: $patronymic, userType: $userType}';

@@ -27,6 +27,7 @@ class ViewModel {
   final Function(bool, bool) changeInputType;
   final Function(List<Message>, String, String) sendWrongAnswer;
   final Function(String, String) login;
+  final Function() logout;
 
   ViewModel(
       {this.isLoading,
@@ -48,7 +49,7 @@ class ViewModel {
       this.sendWrongAnswer,
       this.changeInputType,
       this.isLogin,
-      this.login});
+      this.login, this.logout});
 
   factory ViewModel.create(Store<AppState> store) {
     void _onChangeListening(bool listening) {
@@ -82,9 +83,13 @@ class ViewModel {
         optionalQuestions: store.state.optionalQuestions,
         audioAnswer: store.state.audioAnswer,
         isLogin: store.state.isLogin,
+        loginResponse: store.state.user,
+        isLoading: store.state.isLogin,
+        loginError: store.state.loginError,
         sendMessage: (String message) {
           store.dispatch(sendQuestionAction(message));
         },
+        logout: () => store.dispatch(LogoutAction()),
         changeListening: _onChangeListening,
         addMessage: _onAddMessage,
         changeTyping: _onChangeTyping,

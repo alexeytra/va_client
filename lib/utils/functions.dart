@@ -75,3 +75,9 @@ Future<AuthData> getAuthData() async {
   }
   return AuthData(login, password);
 }
+
+Future<void> clearAuthData() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('login', '');
+  await prefs.setString('password', '');
+}
