@@ -13,7 +13,10 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: state.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
-          user: state.user);
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case ProcessTypingAction:
       return AppState(
@@ -24,7 +27,10 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: state.visibilityInput,
           typing: action.processTyping,
           areOptionalQuestions: state.areOptionalQuestions,
-          user: state.user);
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case ChangeAreOptionsQuestionsAction:
       return AppState(
@@ -35,7 +41,10 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: state.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: action.changeAreOptionsQuestions,
-          user: state.user);
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case ChangeVisibilityInputTypeAction:
       return AppState(
@@ -46,7 +55,10 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: action.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
-          user: state.user);
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case ChangeListeningAction:
       return AppState(
@@ -57,7 +69,10 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: state.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
-          user: state.user);
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case RemoveLastMessageAction:
       return AppState(
@@ -68,34 +83,44 @@ AppState appStateReducer(AppState state, dynamic action) {
           visibilityInput: state.visibilityInput,
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
-          user: state.user);
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case SendQuestionRequestAction:
       return AppState(
-          messages: [...state.messages]..add(
-              Message(message: action.message, sender: 'USER'))..add(
-              Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
+          messages: [...state.messages]
+            ..add(Message(message: action.message, sender: 'USER'))
+            ..add(Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
           visibilityInput: state.visibilityInput,
           typing: true,
           areOptionalQuestions: state.areOptionalQuestions && false,
-          user: state.user);
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case SendQuestionCompletedAction:
       return AppState(
           messages: ([...state.messages]..removeLast())
             ..add(action.msgRes.message),
-          optionalQuestions: []..addAll(['👍', '👎'])..addAll(
-              action.msgRes.optionalQuestions),
+          optionalQuestions: []
+            ..addAll(['👍', '👎'])
+            ..addAll(action.msgRes.optionalQuestions),
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
           visibilityInput: state.visibilityInput,
           typing: false,
           audioAnswer: action.msgRes.audioAnswer,
           areOptionalQuestions: true,
-          user: state.user);
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case StartLoadingAction:
       return AppState(
@@ -107,7 +132,9 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
           user: state.user,
-          isLoading: true);
+          isLoading: true,
+          loginError: state.loginError,
+          isLogin: state.isLogin);
 
     case LoginSuccessAction:
       return AppState(
@@ -119,7 +146,9 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
           user: action.user,
-          isLogin: true);
+          isLogin: true,
+          loginError: state.loginError,
+          isLoading: state.isLoading);
 
     case LoginFailedAction:
       return AppState(
@@ -131,10 +160,13 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
           user: state.user,
-          loginError: true);
+          loginError: true,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
 
     case LogoutAction:
-      return AppState(messages: state.messages,
+      return AppState(
+          messages: state.messages,
           optionalQuestions: state.optionalQuestions,
           listening: state.listening,
           visibilityFloating: state.visibilityFloating,
@@ -142,8 +174,9 @@ AppState appStateReducer(AppState state, dynamic action) {
           typing: state.typing,
           areOptionalQuestions: state.areOptionalQuestions,
           user: null,
-          isLogin: false
-      );
+          isLogin: false,
+          loginError: state.loginError,
+          isLoading: state.isLoading);
 
     default:
       return state;

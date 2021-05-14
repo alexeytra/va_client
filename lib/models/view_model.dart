@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 import 'package:va_client/models/login_response.dart';
 import 'package:va_client/redux/actions.dart';
@@ -26,7 +27,7 @@ class ViewModel {
   final Function(String) sendMessage;
   final Function(bool, bool) changeInputType;
   final Function(List<Message>, String, String) sendWrongAnswer;
-  final Function(String, String) login;
+  final Function(String, String, BuildContext) login;
   final Function() logout;
 
   ViewModel(
@@ -98,8 +99,8 @@ class ViewModel {
         sendWrongAnswer: (List<Message> messages, String msg, String userId) {
           store.dispatch(sendWrongAnswerAction(messages, msg, userId));
         },
-        login: (String userName, String password) {
-          store.dispatch(loginUser(userName, password));
+        login: (String userName, String password, context) {
+          store.dispatch(loginUser(userName, password, context));
         });
   }
 }

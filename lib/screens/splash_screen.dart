@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
       onInit: (store) async {
         var auth = await getAuthData();
         if (auth != null) {
-          store.dispatch(loginUser(auth.login, auth.password));
+          store.dispatch(loginUser(auth.login, auth.password, context));
         }
       },
       converter: (store) => ViewModel.create(store),

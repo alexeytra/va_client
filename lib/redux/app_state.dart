@@ -25,11 +25,11 @@ class AppState {
     @required this.visibilityInput,
     @required this.typing,
     @required this.areOptionalQuestions,
-    this.isLoading,
-    this.loginError,
+    @required this.isLoading,
+    @required this.loginError,
     @required this.user,
     this.audioAnswer,
-    this.isLogin,
+    @required this.isLogin,
   });
 
   AppState.initialState()

@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('>>>>>>>> build');
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
       onDidChange: (_) => WidgetsBinding.instance
@@ -55,14 +56,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }),
           ],
-          leading: IconButton(
-              icon: Icon(Icons.account_circle_sharp),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AccountScreen()),
-                );
-              }),
+          leading: Visibility(
+            visible: viewModel.isLogin,
+            child: IconButton(
+                icon: Icon(Icons.account_circle_sharp),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AccountScreen()),
+                  );
+                }),
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Visibility(

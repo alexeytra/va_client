@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:va_client/models/login_response.dart';
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/message_response.dart';
+import 'package:va_client/models/navigation.dart';
+import 'package:va_client/screens/home_screen.dart';
 import 'package:va_client/services/message_service.dart';
 import 'package:va_client/utils/functions.dart';
 
@@ -57,7 +60,7 @@ class SendQuestionCompletedAction {
 }
 
 class StartLoadingAction {
-StartLoadingAction();
+  StartLoadingAction();
 }
 
 class LoginSuccessAction {
@@ -74,7 +77,6 @@ class LogoutAction {
   LogoutAction();
 }
 
-
 // Thunks
 
 ThunkAction sendQuestionAction(String message) {
@@ -82,20 +84,23 @@ ThunkAction sendQuestionAction(String message) {
     await Future(() async {
       store.dispatch(SendQuestionRequestAction(message));
       var settings = await getSettingsFromSharedPreferences();
-      await sendQuestion(message, settings.voice, settings.generateAnswer).then((msgRes) {
+      await sendQuestion(message, settings.voice, settings.generateAnswer).then(
+          (msgRes) {
         Future.delayed(const Duration(seconds: 1), () {
           store.dispatch(SendQuestionCompletedAction(msgRes));
           getAudioAnswer(msgRes.audioAnswer);
         });
         if (msgRes.additionalResponse != '') {
           Future.delayed(const Duration(seconds: 3), () {
-            store.dispatch(AddMessageAction(Message(message: msgRes.additionalResponse, sender: 'VA')));
+            store.dispatch(AddMessageAction(
+                Message(message: msgRes.additionalResponse, sender: 'VA')));
           });
         }
       }, onError: (error) {
         store.dispatch(SendQuestionCompletedAction(MessageResponse(
             message: Message(
-                message: 'Что-то пошло не так 😁. Попробуйте позже', sender: 'VA'),
+                message: 'Что-то пошло не так 😁. Попробуйте позже',
+                sender: 'VA'),
             optionalQuestions: [])));
       });
     });
@@ -103,7 +108,8 @@ ThunkAction sendQuestionAction(String message) {
   };
 }
 
-ThunkAction sendWrongAnswerAction(List<Message> messages, String msg, String userId) {
+ThunkAction sendWrongAnswerAction(
+    List<Message> messages, String msg, String userId) {
   return (Store store) async {
     await Future(() async {
       store.dispatch(SendQuestionRequestAction(msg));
@@ -113,20 +119,23 @@ ThunkAction sendWrongAnswerAction(List<Message> messages, String msg, String use
       }, onError: (error) {
         store.dispatch(SendQuestionCompletedAction(MessageResponse(
             message: Message(
-                message: 'Что-то пошло не так 😁. Попробуйте позже', sender: 'VA'),
+                message: 'Что-то пошло не так 😁. Попробуйте позже',
+                sender: 'VA'),
             optionalQuestions: [])));
       });
     });
   };
 }
 
-ThunkAction loginUser(String userName, String password) {
+ThunkAction loginUser(String userName, String password, context) {
   return (Store store) async {
     await Future(() async {
       store.dispatch(StartLoadingAction());
-      await login(userName, password).then((value) => {
-        store.dispatch(LoginSuccessAction(value)),
-        saveAuthData(userName, password)
+      await login(userName, password).then((value) {
+        store.dispatch(LoginSuccessAction(value));
+        if (ModalRoute.of(context).settings.name != '/') {
+          Navigator.pushNamed(context, '/home');
+        }
       }, onError: (error) {
         store.dispatch(LoginFailedAction);
         print(error);

@@ -67,10 +67,7 @@ class _SettingScreenState extends State<SettingScreen> {
               Visibility(
                 visible: !viewModel.isLogin,
                 child: TextButton(onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AuthScreen()),
-                  );
+                  Navigator.pushNamed(context, '/auth');
                 }, child: Text('Авторизация')),
               ),
               TextButton(
