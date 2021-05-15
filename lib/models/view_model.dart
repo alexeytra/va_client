@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
+import 'package:va_client/models/login_response.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 
@@ -13,6 +15,10 @@ class ViewModel {
   final bool visibilityInput;
   final List<String> optionalQuestions;
   final String audioAnswer;
+  final bool isLoading;
+  final bool loginError;
+  final bool isLogin;
+  final LoginResponse loginResponse;
 
   final Function(bool) changeListening;
   final Function(Message) addMessage;
@@ -21,9 +27,14 @@ class ViewModel {
   final Function(String) sendMessage;
   final Function(bool, bool) changeInputType;
   final Function(List<Message>, String, String) sendWrongAnswer;
+  final Function(String, String, BuildContext) login;
+  final Function() logout;
 
   ViewModel(
-      {this.listening,
+      {this.isLoading,
+      this.loginError,
+      this.loginResponse,
+      this.listening,
       this.visibilityFloating,
       this.areOptionalQuestions,
       this.messages,
@@ -37,7 +48,9 @@ class ViewModel {
       this.sendMessage,
       this.audioAnswer,
       this.sendWrongAnswer,
-      this.changeInputType});
+      this.changeInputType,
+      this.isLogin,
+      this.login, this.logout});
 
   factory ViewModel.create(Store<AppState> store) {
     void _onChangeListening(bool listening) {
@@ -62,25 +75,32 @@ class ViewModel {
     }
 
     return ViewModel(
-      listening: store.state.listening,
-      messages: store.state.messages,
-      visibilityFloating: store.state.visibilityFloating,
-      typing: store.state.typing,
-      areOptionalQuestions: store.state.areOptionalQuestions,
-      visibilityInput: store.state.visibilityInput,
-      optionalQuestions: store.state.optionalQuestions,
-      audioAnswer: store.state.audioAnswer,
-      sendMessage: (String message) {
-        store.dispatch(sendQuestionAction(message));
-      },
-      changeListening: _onChangeListening,
-      addMessage: _onAddMessage,
-      changeTyping: _onChangeTyping,
-      removeLastMessage: _onRemoveLastMessage,
-      changeInputType: _onChangeInputType,
+        listening: store.state.listening,
+        messages: store.state.messages,
+        visibilityFloating: store.state.visibilityFloating,
+        typing: store.state.typing,
+        areOptionalQuestions: store.state.areOptionalQuestions,
+        visibilityInput: store.state.visibilityInput,
+        optionalQuestions: store.state.optionalQuestions,
+        audioAnswer: store.state.audioAnswer,
+        isLogin: store.state.isLogin,
+        loginResponse: store.state.user,
+        isLoading: store.state.isLogin,
+        loginError: store.state.loginError,
+        sendMessage: (String message) {
+          store.dispatch(sendQuestionAction(message));
+        },
+        logout: () => store.dispatch(LogoutAction()),
+        changeListening: _onChangeListening,
+        addMessage: _onAddMessage,
+        changeTyping: _onChangeTyping,
+        removeLastMessage: _onRemoveLastMessage,
+        changeInputType: _onChangeInputType,
         sendWrongAnswer: (List<Message> messages, String msg, String userId) {
-        store.dispatch(sendWrongAnswerAction(messages, msg, userId));
-      }
-    );
+          store.dispatch(sendWrongAnswerAction(messages, msg, userId));
+        },
+        login: (String userName, String password, context) {
+          store.dispatch(loginUser(userName, password, context));
+        });
   }
 }
