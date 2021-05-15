@@ -39,16 +39,16 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       navigatorKey: Keys.navKey,
       routes: {
-        '/home': (context) {
+        Routes.homeScreen: (context) {
           return HomeScreen();
         },
-        '/settings': (context) {
+        Routes.settingsScreen: (context) {
           return SettingScreen();
         },
-        '/auth': (context) {
+        Routes.authScreen: (context) {
           return AuthScreen();
         },
-        '/account': (context) {
+        Routes.accountScreen: (context) {
           return AccountScreen();
         }
       },

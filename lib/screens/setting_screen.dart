@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/app_state.dart';
-import 'package:va_client/screens/auth_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   @override
@@ -68,7 +67,7 @@ class _SettingScreenState extends State<SettingScreen> {
               Visibility(
                 visible: !viewModel.isLogin,
                 child: TextButton(onPressed: () {
-                  Keys.navKey.currentState.pushNamed('/auth');
+                  Keys.navKey.currentState.pushNamed(Routes.authScreen);
                 }, child: Text('Авторизация')),
               ),
               TextButton(

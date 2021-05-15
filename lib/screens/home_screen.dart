@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('>>>>>>>> build');
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
       onDidChange: (_) => WidgetsBinding.instance
@@ -49,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  Keys.navKey.currentState.pushNamed('/settings');
+                  Keys.navKey.currentState.pushNamed(Routes.settingsScreen);
                 }),
           ],
           leading: Visibility(
@@ -57,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: IconButton(
                 icon: Icon(Icons.account_circle_sharp),
                 onPressed: () {
-                  Keys.navKey.currentState.pushNamed('/account');
+                  Keys.navKey.currentState.pushNamed(Routes.accountScreen);
                 }),
           ),
         ),

@@ -10,10 +10,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-
   final loginController = TextEditingController();
   final passwordController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +22,7 @@ class _AuthScreenState extends State<AuthScreen> {
       converter: (store) => ViewModel.create(store),
       builder: (context, ViewModel viewModel) => Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
           title: Text('Авторизация',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
           centerTitle: true,
@@ -34,9 +33,10 @@ class _AuthScreenState extends State<AuthScreen> {
             shrinkWrap: true,
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: [
-              Icon(
-                Icons.auto_awesome,
-                size: 20.0,
+              Image.asset(
+                'assets/newlogo.png',
+                width: 160,
+                height: 160,
               ),
               SizedBox(height: 48.0),
               TextFormField(
@@ -49,7 +49,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(32.0))),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 20.0),
               TextFormField(
                 controller: passwordController,
                 autofocus: true,
@@ -71,16 +71,22 @@ class _AuthScreenState extends State<AuthScreen> {
                     minWidth: 200.0,
                     height: 42.0,
                     onPressed: () async {
-                      viewModel.login(loginController.text, passwordController.text, context);
-
+                      viewModel.login(loginController.text,
+                          passwordController.text, context);
                     },
-                    color: Colors.orangeAccent,
+                    color: Colors.blueGrey,
                     child: Text(
                       'Войти',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
+              ),
+              SizedBox(height: 30.0),
+              Text(
+                'Авторизация необходима, если вы хотите использовать все возможности Виртуального ассистента',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
               )
             ],
           ),
@@ -88,7 +94,6 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
     );
   }
-
 
   @override
   void dispose() {

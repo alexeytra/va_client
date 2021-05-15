@@ -30,15 +30,26 @@ class _AccountScreenState extends State<AccountScreen> {
             shrinkWrap: true,
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: [
-              CircleAvatar(),
-              Text(viewModel.loginResponse != null ? viewModel.loginResponse.getName() : ''),
+              CircleAvatar(
+                  radius: 80,
+                  child: Text(
+                      viewModel.loginResponse != null
+                          ? viewModel.loginResponse.getShortName()
+                          : '',
+                      style: TextStyle(
+                          fontSize: 40.0, fontWeight: FontWeight.bold))),
+              SizedBox(height: 70.0),
+              Text(viewModel.loginResponse != null
+                  ? viewModel.loginResponse.getName()
+                  : '', style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center,),
+              SizedBox(height: 70.0),
               TextButton(
                   onPressed: () {
                     clearAuthData();
-                    Keys.navKey.currentState.popAndPushNamed('/home');
+                    Keys.navKey.currentState.popAndPushNamed(Routes.homeScreen);
                     viewModel.logout();
                   },
-                  child: Text('Выйти'))
+                  child: Text('Выйти', style: TextStyle(fontSize: 20.0),))
             ],
           ),
         ),
@@ -46,4 +57,3 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 }
-

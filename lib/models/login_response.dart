@@ -30,6 +30,10 @@ class LoginResponse {
     return lastName + ' ' + firstName + ' ' + patronymic;
   }
 
+  String getShortName() {
+    return lastName[0] + firstName[0];
+  }
+
   @override
   String toString() {
     return 'LoginResponse{userId: $userId, access_token: $access_token, refresh_token: $refresh_token, expires_in: $expires_in, lastName: $lastName, firstName: $firstName, patronymic: $patronymic, userType: $userType}';
