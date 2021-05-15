@@ -30,7 +30,7 @@ class LoginResponse {
     return lastName + ' ' + firstName + ' ' + patronymic;
   }
 
-  String getShortName() {
+  String getInitials() {
     return lastName[0] + firstName[0];
   }
 

@@ -55,9 +55,12 @@ class APIManager {
       var response = await http.post(uri, headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       });
+      print('response >>>>' + response.toString());
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
+    } on BadRequestException {
+      return responseJson;
     } catch (e) {
       print('Error ' + e.toString());
     }

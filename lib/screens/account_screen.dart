@@ -32,12 +32,13 @@ class _AccountScreenState extends State<AccountScreen> {
             children: [
               CircleAvatar(
                   radius: 80,
+                  backgroundColor: Colors.green,
                   child: Text(
                       viewModel.loginResponse != null
-                          ? viewModel.loginResponse.getShortName()
+                          ? viewModel.loginResponse.getInitials()
                           : '',
                       style: TextStyle(
-                          fontSize: 40.0, fontWeight: FontWeight.bold))),
+                          fontSize: 40.0, fontWeight: FontWeight.bold, color: Colors.white))),
               SizedBox(height: 70.0),
               Text(viewModel.loginResponse != null
                   ? viewModel.loginResponse.getName()
