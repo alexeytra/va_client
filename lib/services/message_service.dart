@@ -28,7 +28,11 @@ Future<MessageResponse> sendWrongAnswer(List<Message> messages, String userId) a
 
 Future<LoginResponse> login(String userName, String password) async {
   var response = await APIManager.auth({'userName': userName, 'password': password}).then((value) {
-    return getLoginResponseObject(value['status'],  value['response']);
+    if (value['status'] != 400) {
+      return getLoginResponseObject(value['status'],  value['response']);
+    } else {
+      return Future.error(Error);
+    }
   }, onError: (e) {
     return Future.error(e);
   });

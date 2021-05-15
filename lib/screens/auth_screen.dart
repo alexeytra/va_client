@@ -63,7 +63,7 @@ class _AuthScreenState extends State<AuthScreen> {
               SizedBox(height: 24.0),
               Visibility(
                   visible: viewModel.loginError,
-                  child: Text('Неправильный логин или пароль')),
+                  child: Text('Неправильный логин или пароль', style: TextStyle(color: Colors.redAccent),)),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(
@@ -98,34 +98,6 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _showAuthErrorDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('AlertDialog Title'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Approve'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 

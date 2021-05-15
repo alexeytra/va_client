@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -138,8 +140,7 @@ ThunkAction loginUser(String userName, String password, context) {
           Keys.navKey.currentState.pushNamed(Routes.homeScreen);
         }
       }, onError: (error) {
-        store.dispatch(LoginFailedAction);
-        print(error);
+        store.dispatch(LoginFailedAction());
       });
     });
   };

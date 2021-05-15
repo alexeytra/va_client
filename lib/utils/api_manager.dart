@@ -55,12 +55,9 @@ class APIManager {
       var response = await http.post(uri, headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       });
-      print('response >>>>' + response.toString());
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
-    } on BadRequestException {
-      return responseJson;
     } catch (e) {
       print('Error ' + e.toString());
     }
@@ -68,12 +65,12 @@ class APIManager {
   }
 
   static dynamic _response(http.Response response) {
+    var responseJson = json.decode(response.body.toString());
     switch (response.statusCode) {
       case 200:
-        var responseJson = json.decode(response.body.toString());
         return {'status': response.statusCode, 'response': responseJson};
       case 400:
-        throw BadRequestException(response.body.toString());
+        return {'status': response.statusCode, 'response': responseJson};
       case 401:
       case 403:
         throw UnauthorisedException(response.body.toString());

@@ -161,7 +161,7 @@ AppState appStateReducer(AppState state, dynamic action) {
           areOptionalQuestions: state.areOptionalQuestions,
           user: state.user,
           loginError: true,
-          isLoading: state.isLoading,
+          isLoading: false,
           isLogin: state.isLogin);
 
     case LogoutAction:

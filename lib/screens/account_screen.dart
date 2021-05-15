@@ -31,14 +31,14 @@ class _AccountScreenState extends State<AccountScreen> {
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: [
               CircleAvatar(
-                  radius: 80,
+                  radius: 70,
                   backgroundColor: Colors.green,
                   child: Text(
                       viewModel.loginResponse != null
                           ? viewModel.loginResponse.getInitials()
                           : '',
                       style: TextStyle(
-                          fontSize: 40.0, fontWeight: FontWeight.bold, color: Colors.white))),
+                          fontSize: 50.0, fontWeight: FontWeight.bold, color: Colors.white))),
               SizedBox(height: 70.0),
               Text(viewModel.loginResponse != null
                   ? viewModel.loginResponse.getName()
@@ -46,15 +46,48 @@ class _AccountScreenState extends State<AccountScreen> {
               SizedBox(height: 70.0),
               TextButton(
                   onPressed: () {
-                    clearAuthData();
-                    Keys.navKey.currentState.popAndPushNamed(Routes.homeScreen);
-                    viewModel.logout();
+                    _showUserLogoutConfirm(viewModel);
                   },
                   child: Text('Выйти', style: TextStyle(fontSize: 20.0),))
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showUserLogoutConfirm(ViewModel viewModel) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Выход из учетной записи'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Вы действительно хотите выйти из учетной записи?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Да'),
+              onPressed: () {
+                clearAuthData();
+                Keys.navKey.currentState.popAndPushNamed(Routes.homeScreen);
+                viewModel.logout();
+              },
+            ),
+            TextButton(
+              child: Text('Нет'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
