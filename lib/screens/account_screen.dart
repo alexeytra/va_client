@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/utils/functions.dart';
@@ -30,14 +31,11 @@ class _AccountScreenState extends State<AccountScreen> {
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: [
               CircleAvatar(),
-              Text(viewModel.loginResponse.getName()),
+              Text(viewModel.loginResponse != null ? viewModel.loginResponse.getName() : ''),
               TextButton(
                   onPressed: () {
                     clearAuthData();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
+                    Keys.navKey.currentState.popAndPushNamed('/home');
                     viewModel.logout();
                   },
                   child: Text('Выйти'))
@@ -46,12 +44,6 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    print('dispose >>>>>>>>>>>>>');
-    super.dispose();
   }
 }
 

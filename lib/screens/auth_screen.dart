@@ -72,6 +72,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     height: 42.0,
                     onPressed: () async {
                       viewModel.login(loginController.text, passwordController.text, context);
+
                     },
                     color: Colors.orangeAccent,
                     child: Text(

@@ -6,9 +6,13 @@ import 'package:redux_logging/redux_logging.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/redux/reducer.dart';
+import 'package:va_client/screens/account_screen.dart';
 import 'package:va_client/screens/auth_screen.dart';
 import 'package:va_client/screens/home_screen.dart';
+import 'package:va_client/screens/setting_screen.dart';
 import 'package:va_client/screens/splash_screen.dart';
+
+import 'models/navigation.dart';
 
 Future<void> main() async {
   final store = Store<AppState>(
@@ -33,12 +37,19 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen(),
+      navigatorKey: Keys.navKey,
       routes: {
         '/home': (context) {
           return HomeScreen();
         },
+        '/settings': (context) {
+          return SettingScreen();
+        },
         '/auth': (context) {
           return AuthScreen();
+        },
+        '/account': (context) {
+          return AccountScreen();
         }
       },
     );

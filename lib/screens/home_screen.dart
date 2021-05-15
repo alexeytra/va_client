@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/models/message_model.dart';
+import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/app_state.dart';
-import 'package:va_client/screens/account_screen.dart';
-import 'package:va_client/screens/setting_screen.dart';
 import 'package:va_client/utils/functions.dart';
 import 'package:va_client/widgets/input_question.dart';
 import 'package:va_client/widgets/show_message.dart';
@@ -50,10 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SettingScreen()),
-                  );
+                  Keys.navKey.currentState.pushNamed('/settings');
                 }),
           ],
           leading: Visibility(
@@ -61,10 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: IconButton(
                 icon: Icon(Icons.account_circle_sharp),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AccountScreen()),
-                  );
+                  Keys.navKey.currentState.pushNamed('/account');
                 }),
           ),
         ),

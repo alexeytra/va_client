@@ -5,5 +5,5 @@ class Keys {
 }
 
 class Routes {
-  static final homeScreen = '/home_screen';
+  static final homeScreen = '/home';
 }
