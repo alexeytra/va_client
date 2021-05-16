@@ -37,6 +37,7 @@ dependencies:
   build_runner: ^1.10.11
   shared_preferences: ^0.5.12+4
   flutter_dotenv: ^2.1.0
+  flutter_rating_bar: ^3.2.0
 
 
   # The following adds the Cupertino Icons font to your application.

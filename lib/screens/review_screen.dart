@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:va_client/models/navigation.dart';
 
 class ReviewScreen extends StatefulWidget {
   @override
@@ -7,9 +9,13 @@ class ReviewScreen extends StatefulWidget {
 
 class _ReviewScreenState extends State<ReviewScreen> {
   final reviewController = TextEditingController();
+  double rating = 5.0;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text('Отзыв',
             style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
@@ -39,23 +45,103 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16.0))),
               ),
-              SizedBox(height: 70.0),
+              SizedBox(height: 30.0),
+              Center(
+                child: RatingBar.builder(
+                  initialRating: rating,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, index) {
+                    switch (index) {
+                      case 0:
+                        return Icon(
+                          Icons.sentiment_very_dissatisfied,
+                          color: Colors.red,
+                        );
+                      case 1:
+                        return Icon(
+                          Icons.sentiment_dissatisfied,
+                          color: Colors.redAccent,
+                        );
+                      case 2:
+                        return Icon(
+                          Icons.sentiment_neutral,
+                          color: Colors.amber,
+                        );
+                      case 3:
+                        return Icon(
+                          Icons.sentiment_satisfied,
+                          color: Colors.lightGreen,
+                        );
+                      case 4:
+                        return Icon(
+                          Icons.sentiment_very_satisfied,
+                          color: Colors.green,
+                        );
+                      default:
+                        return Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        );
+                    }
+                  },
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                      this.rating = rating;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(height: 30.0),
               Material(
                 borderRadius: BorderRadius.circular(16.0),
                 clipBehavior: Clip.antiAlias,
                 shadowColor: Colors.orangeAccent.shade100,
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    scaffoldKey.currentState.showSnackBar(_showSendSnackBar());
+                    setState(() {
+                      reviewController.text = '';
+                      rating = 5.0;
+                    });
+                    Future.delayed(Duration(seconds: 2)).then((_) =>
+                        Keys.navKey.currentState.pushNamed(Routes.homeScreen));
+                  },
                   minWidth: 200.0,
                   height: 42.0,
                   color: Colors.blueGrey,
                   child: Text(
                     'Отправить',
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               )
             ]),
+      ),
+    );
+  }
+
+  SnackBar _showSendSnackBar() {
+    return SnackBar(
+      content: const Text(
+        'Спасибо! Ваш отзыв отправлен.',
+        textAlign: TextAlign.center,
+      ),
+      duration: const Duration(milliseconds: 2500),
+      width: 300.0,
+      // Width of the SnackBar.
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8.0, // Inner padding for SnackBar content.
+      ),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
       ),
     );
   }
