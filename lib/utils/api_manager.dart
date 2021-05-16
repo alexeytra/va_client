@@ -17,6 +17,10 @@ class APIManager {
     return post(param, 'answer/wrong');
   }
 
+  static Future<dynamic> sendUserReview(Map param) async {
+    return post(param, 'review');
+  }
+
   static Future<dynamic> loginApi(Map param) async {
     return auth(param);
   }
@@ -65,7 +69,12 @@ class APIManager {
   }
 
   static dynamic _response(http.Response response) {
-    var responseJson = json.decode(response.body.toString());
+    var responseJson;
+    if (response.body != '') {
+      responseJson = json.decode(response.body.toString());
+    } else {
+      responseJson = '';
+    }
     switch (response.statusCode) {
       case 200:
         return {'status': response.statusCode, 'response': responseJson};
