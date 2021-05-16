@@ -16,7 +16,7 @@ class _SettingScreenState extends State<SettingScreen> {
   var isGenerateAnswer = true;
 
   @override
-  void initState()  {
+  void initState() {
     _getSharedPrefs();
     super.initState();
   }
@@ -34,12 +34,16 @@ class _SettingScreenState extends State<SettingScreen> {
           elevation: 0,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
               Row(
                 children: [
-                  Expanded(child: Text('Использовать голос')),
+                  Expanded(
+                      child: Text(
+                    'Использовать голос',
+                    style: TextStyle(fontSize: 16),
+                  )),
                   Switch(
                       value: isVoice,
                       activeColor: Colors.orangeAccent,
@@ -52,7 +56,11 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
               Row(
                 children: [
-                  Expanded(child: Text('Генерация ответа')),
+                  Expanded(
+                      child: Text(
+                    'Генерация ответа',
+                    style: TextStyle(fontSize: 16),
+                  )),
                   Switch(
                       value: isGenerateAnswer,
                       activeColor: Colors.orangeAccent,
@@ -63,18 +71,27 @@ class _SettingScreenState extends State<SettingScreen> {
                       })
                 ],
               ),
+              SizedBox(height: 50.0),
               // Text()
               Visibility(
                 visible: !viewModel.isLogin,
-                child: TextButton(onPressed: () {
-                  Keys.navKey.currentState.pushNamed(Routes.authScreen);
-                }, child: Text('Авторизация')),
+                child: TextButton(
+                    onPressed: () {
+                      Keys.navKey.currentState.pushNamed(Routes.authScreen);
+                    },
+                    child: Text('Авторизация', style: TextStyle(fontSize: 16))),
               ),
               TextButton(
-                onPressed: () {},
-                child: Text('Отправить отзыв'),
+                onPressed: () {
+                  Keys.navKey.currentState.pushNamed(Routes.reviewScreen);
+                },
+                child: Text('Отправить отзыв', style: TextStyle(fontSize: 16)),
               ),
-              TextButton(onPressed: () {}, child: Text('О приложении')),
+              TextButton(
+                  onPressed: () {
+                    _showAboutApp();
+                  },
+                  child: Text('О приложении', style: TextStyle(fontSize: 16))),
             ],
           ),
         ),
@@ -96,5 +113,33 @@ class _SettingScreenState extends State<SettingScreen> {
       isVoice = prefs.getBool('voice') ?? true;
       isGenerateAnswer = prefs.getBool('generateAnswer') ?? true;
     });
+  }
+
+  Future<void> _showAboutApp() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('О приложении'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Виртуальный ассистент'),
+                Text('Версия 1.0.2'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

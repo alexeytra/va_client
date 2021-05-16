@@ -9,5 +9,5 @@ class Routes {
   static final accountScreen = '/account';
   static final settingsScreen = '/settings';
   static final authScreen = '/auth';
-
+  static final reviewScreen = '/review';
 }

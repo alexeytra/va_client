@@ -9,6 +9,7 @@ import 'package:va_client/redux/reducer.dart';
 import 'package:va_client/screens/account_screen.dart';
 import 'package:va_client/screens/auth_screen.dart';
 import 'package:va_client/screens/home_screen.dart';
+import 'package:va_client/screens/review_screen.dart';
 import 'package:va_client/screens/setting_screen.dart';
 import 'package:va_client/screens/splash_screen.dart';
 
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
         },
         Routes.accountScreen: (context) {
           return AccountScreen();
+        },
+        Routes.reviewScreen: (context) {
+          return ReviewScreen();
         }
       },
     );

@@ -47,7 +47,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     hintText: 'Логин',
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0))),
+                        borderRadius: BorderRadius.circular(16.0))),
               ),
               SizedBox(height: 20.0),
               TextFormField(
@@ -58,7 +58,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     hintText: 'Пароль',
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0))),
+                        borderRadius: BorderRadius.circular(16.0))),
               ),
               SizedBox(height: 24.0),
               Visibility(
@@ -67,7 +67,7 @@ class _AuthScreenState extends State<AuthScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(
-                  borderRadius: BorderRadius.circular(32.0),
+                  borderRadius: BorderRadius.circular(16.0),
                   clipBehavior: Clip.antiAlias,
                   shadowColor: Colors.orangeAccent.shade100,
                   child: MaterialButton(
