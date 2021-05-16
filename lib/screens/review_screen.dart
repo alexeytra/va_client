@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:va_client/models/navigation.dart';
+import 'package:va_client/utils/api_manager.dart';
 
 class ReviewScreen extends StatefulWidget {
   @override
@@ -102,6 +103,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 shadowColor: Colors.orangeAccent.shade100,
                 child: MaterialButton(
                   onPressed: () {
+                    APIManager.sendUserReview({'review': reviewController.text, 'rating': rating});
                     scaffoldKey.currentState.showSnackBar(_showSendSnackBar());
                     setState(() {
                       reviewController.text = '';
