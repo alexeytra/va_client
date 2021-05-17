@@ -137,7 +137,7 @@ ThunkAction loginUser(String userName, String password, context) {
         store.dispatch(LoginSuccessAction(value));
         saveAuthData(userName, password);
         if (ModalRoute.of(context).settings.name != '/') {
-          Keys.navKey.currentState.pushNamed(Routes.homeScreen);
+          Keys.navKey.currentState.popUntil((route) => route.isFirst);
         }
       }, onError: (error) {
         store.dispatch(LoginFailedAction());

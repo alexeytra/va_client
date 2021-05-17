@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 1), // 5 потом поставить 5 секунд
+        Duration(seconds: 6), // 5 потом поставить 5 секунд
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => HomeScreen())));
   }
