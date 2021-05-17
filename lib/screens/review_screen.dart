@@ -9,8 +9,9 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
-  final reviewController = TextEditingController();
-  double rating = 5.0;
+  final _reviewController = TextEditingController();
+  double _rating = 5.0;
+  String _review = '';
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -36,10 +37,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
               ),
               SizedBox(height: 70.0),
               TextField(
+                onChanged: (value){
+                  setState(() {
+                    _review = value;
+                  });
+                },
                 keyboardType: TextInputType.multiline,
                 maxLength: 100,
                 maxLines: 10,
-                controller: reviewController,
+                controller: _reviewController,
                 decoration: InputDecoration(
                     hintText: 'Введите ваш тект здесь...',
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -49,7 +55,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
               SizedBox(height: 30.0),
               Center(
                 child: RatingBar.builder(
-                  initialRating: rating,
+                  initialRating: _rating,
                   minRating: 1,
                   direction: Axis.horizontal,
                   allowHalfRating: true,
@@ -91,7 +97,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   },
                   onRatingUpdate: (rating) {
                     setState(() {
-                      this.rating = rating;
+                      _rating = rating;
                     });
                   },
                 ),
@@ -102,16 +108,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 clipBehavior: Clip.antiAlias,
                 shadowColor: Colors.orangeAccent.shade100,
                 child: MaterialButton(
-                  onPressed: () {
-                    APIManager.sendUserReview({'review': reviewController.text, 'rating': rating});
+                  onPressed: _review != '' ? () {
+                    APIManager.sendUserReview({'review': _reviewController.text, 'rating': _rating});
                     scaffoldKey.currentState.showSnackBar(_showSendSnackBar());
                     setState(() {
-                      reviewController.text = '';
-                      rating = 5.0;
+                      _reviewController.text = '';
+                      _rating = 5.0;
                     });
                     Future.delayed(Duration(seconds: 2)).then((_) =>
                         Keys.navKey.currentState.pushNamed(Routes.homeScreen));
-                  },
+                  } : null,
                   minWidth: 200.0,
                   height: 42.0,
                   color: Colors.blueGrey,
@@ -150,7 +156,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   @override
   void dispose() {
-    reviewController.dispose();
+    _reviewController.dispose();
     super.dispose();
   }
 }

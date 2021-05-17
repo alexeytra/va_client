@@ -75,7 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Text('Да'),
               onPressed: () {
                 clearAuthData();
-                Keys.navKey.currentState.popAndPushNamed(Routes.homeScreen);
+                Keys.navKey.currentState.popUntil((route) => route.isFirst);
                 viewModel.logout();
               },
             ),
