@@ -81,12 +81,12 @@ class LogoutAction {
 
 // Thunks
 
-ThunkAction sendQuestionAction(String message) {
+ThunkAction sendQuestionAction(String message, LoginResponse user) {
   return (Store store) async {
     await Future(() async {
       store.dispatch(SendQuestionRequestAction(message));
       var settings = await getSettingsFromSharedPreferences();
-      await sendQuestion(message, settings.voice, settings.generateAnswer).then(
+      await sendQuestion(message, settings.voice, settings.generateAnswer, store.state.user).then(
           (msgRes) {
         Future.delayed(const Duration(seconds: 1), () {
           store.dispatch(SendQuestionCompletedAction(msgRes));

@@ -24,7 +24,7 @@ class ViewModel {
   final Function(Message) addMessage;
   final Function(bool) changeTyping;
   final Function() removeLastMessage;
-  final Function(String) sendMessage;
+  final Function(String, LoginResponse) sendMessage;
   final Function(bool, bool) changeInputType;
   final Function(List<Message>, String, String) sendWrongAnswer;
   final Function(String, String, BuildContext) login;
@@ -87,8 +87,8 @@ class ViewModel {
         loginResponse: store.state.user,
         isLoading: store.state.isLogin,
         loginError: store.state.loginError,
-        sendMessage: (String message) {
-          store.dispatch(sendQuestionAction(message));
+        sendMessage: (String message, LoginResponse user) {
+          store.dispatch(sendQuestionAction(message, user));
         },
         logout: () => store.dispatch(LogoutAction()),
         changeListening: _onChangeListening,

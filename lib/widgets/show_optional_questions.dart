@@ -31,9 +31,9 @@ class ShowOptionalQuestions extends StatelessWidget {
                         onSelected: (question) {
                           if (optionalQuestion != '👎' &&
                               optionalQuestion != '👍') {
-                            viewModel.sendMessage(optionalQuestion);
+                            viewModel.sendMessage(optionalQuestion, viewModel.loginResponse);
                           } else if (optionalQuestion == '👍') {
-                            viewModel.sendMessage('👍');
+                            viewModel.sendMessage('👍', viewModel.loginResponse);
                           } else {
                             var dialog = viewModel.messages
                                 .getRange(viewModel.messages.length - 2,

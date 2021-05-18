@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (viewModel.listening) {
       viewModel.changeListening(false);
       if (_text != '') {
-        viewModel.sendMessage(_text);
+        viewModel.sendMessage(_text, viewModel.loginResponse);
       }
       setState(() {
         _text = '';

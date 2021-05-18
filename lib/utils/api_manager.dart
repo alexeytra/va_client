@@ -7,18 +7,18 @@ import 'dart:convert';
 import 'dart:async';
 
 class APIManager {
-  static final api = 'http://127.0.0.1:5000/va/api/v1/';
+  static final api = 'http://127.0.0.1:5000';
 
   static Future<dynamic> sendQuestionApi(Map param) async {
-    return post(param, 'question/text');
+    return post(param, '/va/api/v1/question/text');
   }
 
   static Future<dynamic> sendWrongAnswerApi(Map param) async {
-    return post(param, 'answer/wrong');
+    return post(param, '/va/api/v1/answer/wrong');
   }
 
   static Future<dynamic> sendUserReview(Map param) async {
-    return post(param, 'review');
+    return post(param, '/va/api/v1/review');
   }
 
   static Future<dynamic> loginApi(Map param) async {
