@@ -46,7 +46,7 @@ class InputQuestion extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
-                    viewModel.sendMessage(_textFieldController.text);
+                    viewModel.sendMessage(_textFieldController.text, viewModel.loginResponse);
                     _textFieldController.text = '';
                   },
                   color: Theme.of(context).primaryColor,

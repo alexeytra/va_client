@@ -4,10 +4,17 @@ import 'package:va_client/models/message_response.dart';
 import 'package:va_client/utils/api_manager.dart';
 import 'package:va_client/utils/functions.dart';
 
-Future<MessageResponse> sendQuestion(String message, bool voice, bool generateAnswer) async {
+Future<MessageResponse> sendQuestion(
+    String message, bool voice, bool generateAnswer, LoginResponse user) async {
   var question = message.split('\s+');
-  var response = await APIManager.sendQuestionApi(
-      {'question': question.take(10).join(' '), 'voice': voice, 'generateAnswer': generateAnswer}).then((value) {
+  var response = await APIManager.sendQuestionApi({
+    'question': question.take(10).join(' '),
+    'voice': voice,
+    'generateAnswer': generateAnswer,
+    'userId': user?.userId ?? '',
+    'token': user?.access_token ?? '',
+    'userType': user?.userType ?? ''
+  }).then((value) {
     return getMessageResponseObject(value['status'], value['response']);
   }, onError: (error) {
     return Future.error(error);
@@ -16,8 +23,10 @@ Future<MessageResponse> sendQuestion(String message, bool voice, bool generateAn
   return response;
 }
 
-Future<MessageResponse> sendWrongAnswer(List<Message> messages, String userId) async {
-  var response =  await APIManager.sendWrongAnswerApi({'messages': messages, 'userId': userId}).then((value) {
+Future<MessageResponse> sendWrongAnswer(
+    List<Message> messages, String userId) async {
+  var response = await APIManager.sendWrongAnswerApi(
+      {'messages': messages, 'userId': userId}).then((value) {
     return getMessageResponseObject(value['status'], value['response']);
   }, onError: (e) {
     return Future.error(e);
@@ -27,9 +36,11 @@ Future<MessageResponse> sendWrongAnswer(List<Message> messages, String userId) a
 }
 
 Future<LoginResponse> login(String userName, String password) async {
-  var response = await APIManager.auth({'userName': userName, 'password': password}).then((value) {
+  var response =
+      await APIManager.auth({'userName': userName, 'password': password}).then(
+          (value) {
     if (value['status'] != 400) {
-      return getLoginResponseObject(value['status'],  value['response']);
+      return getLoginResponseObject(value['status'], value['response']);
     } else {
       return Future.error(Error);
     }
