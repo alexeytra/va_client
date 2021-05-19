@@ -4,6 +4,7 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
+import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/utils/functions.dart';
 import 'package:va_client/widgets/input_question.dart';
@@ -25,13 +26,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _speechToText = stt.SpeechToText();
-    getAudioIntro();
+    // getAudioIntro();
+
   }
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
+      onInit: (store) async {
+        var settings = await getSettingsFromSharedPreferences();
+        if (store.state.isLogin) {
+          store.dispatch(getUserGreetingAction(settings.voice, store.state.user));
+        } else {
+          store.dispatch(getGreetingAction(settings.voice));
+        }
+      },
       onDidChange: (_) => WidgetsBinding.instance
           .addPostFrameCallback((_) => _scrollToBottom()),
       converter: (store) => ViewModel.create(store),

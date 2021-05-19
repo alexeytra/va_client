@@ -25,6 +25,14 @@ class APIManager {
     return auth(param);
   }
 
+  static Future<dynamic> getGreeting(Map param) async {
+    return post(param, '/va/api/v1/greeting');
+  }
+
+  static Future<dynamic> getUserGreeting(Map param) async {
+    return post(param, '/va/api/v1/user/greeting');
+  }
+
   static dynamic post(Map param, String endpoint) async {
     var responseJson;
     try {

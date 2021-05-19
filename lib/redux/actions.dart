@@ -79,6 +79,10 @@ class LogoutAction {
   LogoutAction();
 }
 
+class GetGreetingRequestAction {
+  GetGreetingRequestAction();
+}
+
 // Thunks
 
 ThunkAction sendQuestionAction(String message, LoginResponse user) {
@@ -129,7 +133,7 @@ ThunkAction sendWrongAnswerAction(
   };
 }
 
-ThunkAction loginUser(String userName, String password, context) {
+ThunkAction loginUserAction(String userName, String password, context) {
   return (Store store) async {
     await Future(() async {
       store.dispatch(StartLoadingAction());
@@ -143,5 +147,50 @@ ThunkAction loginUser(String userName, String password, context) {
         store.dispatch(LoginFailedAction());
       });
     });
+  };
+}
+
+
+ThunkAction getGreetingAction(bool voice) {
+  return (Store store) async {
+    await Future(() async {
+      store.dispatch(GetGreetingRequestAction());
+      var settings = await getSettingsFromSharedPreferences();
+      await getGreeting(settings.voice).then((msgRes) {
+        Future.delayed(const Duration(seconds: 1), () {
+          store.dispatch(SendQuestionCompletedAction(msgRes));
+          getAudioAnswer(msgRes.audioAnswer);
+        });
+      }, onError: (error) {
+        store.dispatch(SendQuestionCompletedAction(MessageResponse(
+            message: Message(
+                message: 'Что-то пошло не так 😁. Попробуйте позже',
+                sender: 'VA'),
+            optionalQuestions: [])));
+      });
+    });
+    // store.dispatch(action) экшн для печатания сообщения
+  };
+}
+
+ThunkAction getUserGreetingAction(bool voice, LoginResponse user) {
+  return (Store store) async {
+    await Future(() async {
+      store.dispatch(GetGreetingRequestAction());
+      var settings = await getSettingsFromSharedPreferences();
+      await getUserGreeting(settings.voice, user).then((msgRes) {
+        Future.delayed(const Duration(seconds: 1), () {
+          store.dispatch(SendQuestionCompletedAction(msgRes));
+          getAudioAnswer(msgRes.audioAnswer);
+        });
+      }, onError: (error) {
+        store.dispatch(SendQuestionCompletedAction(MessageResponse(
+            message: Message(
+                message: 'Что-то пошло не так 😁. Попробуйте позже',
+                sender: 'VA'),
+            optionalQuestions: [])));
+      });
+    });
+    // store.dispatch(action) экшн для печатания сообщения
   };
 }

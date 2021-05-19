@@ -178,6 +178,21 @@ AppState appStateReducer(AppState state, dynamic action) {
           loginError: state.loginError,
           isLoading: state.isLoading);
 
+    case GetGreetingRequestAction:
+      return AppState(
+          messages: [...state.messages]
+            ..add(Message(iconTyping: 'assets/typing.gif', sender: 'VA')),
+          optionalQuestions: state.optionalQuestions,
+          listening: state.listening,
+          visibilityFloating: state.visibilityFloating,
+          visibilityInput: state.visibilityInput,
+          typing: true,
+          areOptionalQuestions: state.areOptionalQuestions && false,
+          user: state.user,
+          loginError: state.loginError,
+          isLoading: state.isLoading,
+          isLogin: state.isLogin);
+
     default:
       return state;
   }
