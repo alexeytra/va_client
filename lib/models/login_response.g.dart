@@ -22,9 +22,9 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
     <String, dynamic>{
       'userId': instance.userId,
-      'access_token': instance.access_token,
-      'refresh_token': instance.refresh_token,
-      'expires_in': instance.expires_in,
+      'access_token': instance.accessToken,
+      'refresh_token': instance.refreshToken,
+      'expires_in': instance.expiresIn,
       'lastName': instance.lastName,
       'firstName': instance.firstName,
       'patronymic': instance.patronymic,

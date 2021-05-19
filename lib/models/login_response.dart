@@ -4,9 +4,9 @@ part 'login_response.g.dart';
 @JsonSerializable()
 class LoginResponse {
   String userId;
-  String access_token;
-  String refresh_token;
-  int expires_in;
+  String accessToken;
+  String refreshToken;
+  int expiresIn;
   String lastName;
   String firstName;
   String patronymic;
@@ -14,9 +14,9 @@ class LoginResponse {
 
   LoginResponse(
       this.userId,
-      this.access_token,
-      this.refresh_token,
-      this.expires_in,
+      this.accessToken,
+      this.refreshToken,
+      this.expiresIn,
       this.lastName,
       this.firstName,
       this.patronymic,
@@ -36,6 +36,6 @@ class LoginResponse {
 
   @override
   String toString() {
-    return 'LoginResponse{userId: $userId, access_token: $access_token, refresh_token: $refresh_token, expires_in: $expires_in, lastName: $lastName, firstName: $firstName, patronymic: $patronymic, userType: $userType}';
+    return 'LoginResponse{userId: $userId, access_token: $accessToken, refresh_token: $refreshToken, expires_in: $expiresIn, lastName: $lastName, firstName: $firstName, patronymic: $patronymic, userType: $userType}';
   }
 }

@@ -100,7 +100,7 @@ class ViewModel {
           store.dispatch(sendWrongAnswerAction(messages, msg, userId));
         },
         login: (String userName, String password, context) {
-          store.dispatch(loginUser(userName, password, context));
+          store.dispatch(loginUserAction(userName, password, context));
         });
   }
 }

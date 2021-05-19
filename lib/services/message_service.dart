@@ -12,7 +12,7 @@ Future<MessageResponse> sendQuestion(
     'voice': voice,
     'generateAnswer': generateAnswer,
     'userId': user?.userId ?? '',
-    'token': user?.access_token ?? '',
+    'token': user?.accessToken ?? '',
     'userType': user?.userType ?? ''
   }).then((value) {
     return getMessageResponseObject(value['status'], value['response']);
@@ -41,6 +41,36 @@ Future<LoginResponse> login(String userName, String password) async {
           (value) {
     if (value['status'] != 400) {
       return getLoginResponseObject(value['status'], value['response']);
+    } else {
+      return Future.error(Error);
+    }
+  }, onError: (e) {
+    return Future.error(e);
+  });
+  return response;
+}
+
+Future<MessageResponse> getGreeting(bool voice) async {
+  var response = await APIManager.getGreeting({'voice': voice}).then((value) {
+    if (value['status'] != 400) {
+      return getMessageResponseObject(value['status'], value['response']);
+    } else {
+      return Future.error(Error);
+    }
+  }, onError: (e) {
+    return Future.error(e);
+  });
+  return response;
+}
+
+Future<MessageResponse> getUserGreeting(bool voice, LoginResponse user) async {
+  var response = await APIManager.getUserGreeting({
+    'voice': voice,
+    'userType': user.userType,
+    'accessToken': user.accessToken
+  }).then((value) {
+    if (value['status'] != 400) {
+      return getMessageResponseObject(value['status'], value['response']);
     } else {
       return Future.error(Error);
     }

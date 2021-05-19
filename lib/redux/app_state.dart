@@ -33,12 +33,7 @@ class AppState {
   });
 
   AppState.initialState()
-      : messages = List.unmodifiable(<Message>[
-          Message(
-              sender: 'VA',
-              message:
-                  'Добрый день! Я - Виртуальный ассистент. Чем могу помочь?')
-        ]),
+      : messages = List.unmodifiable(<Message>[]),
         optionalQuestions =
             List.unmodifiable(<String>['👍', '👎', 'Привет', 'Как дела']),
         listening = false,
