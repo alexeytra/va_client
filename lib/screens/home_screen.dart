@@ -6,7 +6,6 @@ import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
-import 'package:va_client/utils/functions.dart';
 import 'package:va_client/widgets/input_question.dart';
 import 'package:va_client/widgets/show_message.dart';
 import 'package:va_client/widgets/show_optional_questions.dart';
@@ -35,11 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
       onInit: (store) async {
-        var settings = await getSettingsFromSharedPreferences();
         if (store.state.isLogin) {
-          store.dispatch(getUserGreetingAction(settings.voice, store.state.user));
+          store.dispatch(getUserGreetingAction(store.state.user));
         } else {
-          store.dispatch(getGreetingAction(settings.voice));
+          store.dispatch(getGreetingAction());
         }
       },
       onDidChange: (_) => WidgetsBinding.instance

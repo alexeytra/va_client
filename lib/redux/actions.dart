@@ -110,7 +110,6 @@ ThunkAction sendQuestionAction(String message, LoginResponse user) {
             optionalQuestions: [])));
       });
     });
-    // store.dispatch(action) экшн для печатания сообщения
   };
 }
 
@@ -151,7 +150,7 @@ ThunkAction loginUserAction(String userName, String password, context) {
 }
 
 
-ThunkAction getGreetingAction(bool voice) {
+ThunkAction getGreetingAction() {
   return (Store store) async {
     await Future(() async {
       store.dispatch(GetGreetingRequestAction());
@@ -169,11 +168,10 @@ ThunkAction getGreetingAction(bool voice) {
             optionalQuestions: [])));
       });
     });
-    // store.dispatch(action) экшн для печатания сообщения
   };
 }
 
-ThunkAction getUserGreetingAction(bool voice, LoginResponse user) {
+ThunkAction getUserGreetingAction(LoginResponse user) {
   return (Store store) async {
     await Future(() async {
       store.dispatch(GetGreetingRequestAction());
@@ -191,6 +189,47 @@ ThunkAction getUserGreetingAction(bool voice, LoginResponse user) {
             optionalQuestions: [])));
       });
     });
-    // store.dispatch(action) экшн для печатания сообщения
+  };
+}
+
+ThunkAction getAuthGreetingAction(LoginResponse user) {
+  return (Store store) async {
+    await Future(() async {
+      store.dispatch(GetGreetingRequestAction());
+      var settings = await getSettingsFromSharedPreferences();
+      await getUserAuthGreeting(settings.voice, user).then((msgRes) {
+        Future.delayed(const Duration(seconds: 1), () {
+          store.dispatch(SendQuestionCompletedAction(msgRes));
+          getAudioAnswer(msgRes.audioAnswer);
+        });
+      }, onError: (error) {
+        store.dispatch(SendQuestionCompletedAction(MessageResponse(
+            message: Message(
+                message: 'Что-то пошло не так 😁. Попробуйте позже',
+                sender: 'VA'),
+            optionalQuestions: [])));
+      });
+    });
+  };
+}
+
+ThunkAction getLogoutGoodbyeAction() {
+  return (Store store) async {
+    await Future(() async {
+      store.dispatch(GetGreetingRequestAction());
+      var settings = await getSettingsFromSharedPreferences();
+      await getUserLogoutGoodbye(settings.voice).then((msgRes) {
+        Future.delayed(const Duration(seconds: 1), () {
+          store.dispatch(SendQuestionCompletedAction(msgRes));
+          getAudioAnswer(msgRes.audioAnswer);
+        });
+      }, onError: (error) {
+        store.dispatch(SendQuestionCompletedAction(MessageResponse(
+            message: Message(
+                message: 'Что-то пошло не так 😁. Попробуйте позже',
+                sender: 'VA'),
+            optionalQuestions: [])));
+      });
+    });
   };
 }

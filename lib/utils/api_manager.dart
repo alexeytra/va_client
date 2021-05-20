@@ -33,6 +33,14 @@ class APIManager {
     return post(param, '/va/api/v1/user/greeting');
   }
 
+  static Future<dynamic> getUserAuthGreeting(Map param) async {
+    return post(param, '/va/api/v1/user/login');
+  }
+
+  static Future<dynamic> getUserLogoutGoodbye(Map param) async {
+    return post(param, '/va/api/v1/user/logout');
+  }
+
   static dynamic post(Map param, String endpoint) async {
     var responseJson;
     try {
