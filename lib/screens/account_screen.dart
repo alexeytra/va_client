@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
+import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/utils/functions.dart';
 
@@ -17,6 +18,11 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
+      onDispose: (store) {
+        if (!store.state.isLogin) {
+          store.dispatch(getLogoutGoodbyeAction());
+        }
+      },
       converter: (store) => ViewModel.create(store),
       builder: (context, ViewModel viewModel) => Scaffold(
         appBar: AppBar(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/app_state.dart';
+import 'package:va_client/redux/actions.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -12,6 +12,7 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final loginController = TextEditingController();
   final passwordController = TextEditingController();
+  var login = false;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,11 @@ class _AuthScreenState extends State<AuthScreen> {
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
       converter: (store) => ViewModel.create(store),
+      onDispose: (store) {
+        if (store.state.isLogin) {
+          store.dispatch(getAuthGreetingAction(store.state.user));
+        }
+      },
       builder: (context, ViewModel viewModel) => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
@@ -63,7 +69,10 @@ class _AuthScreenState extends State<AuthScreen> {
               SizedBox(height: 24.0),
               Visibility(
                   visible: viewModel.loginError,
-                  child: Text('Неправильный логин или пароль', style: TextStyle(color: Colors.redAccent),)),
+                  child: Text(
+                    'Неправильный логин или пароль',
+                    style: TextStyle(color: Colors.redAccent),
+                  )),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(

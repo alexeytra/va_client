@@ -79,3 +79,35 @@ Future<MessageResponse> getUserGreeting(bool voice, LoginResponse user) async {
   });
   return response;
 }
+
+Future<MessageResponse> getUserAuthGreeting(bool voice, LoginResponse user) async {
+  var response = await APIManager.getUserAuthGreeting({
+    'voice': voice,
+    'userType': user.userType,
+    'accessToken': user.accessToken
+  }).then((value) {
+    if (value['status'] != 400) {
+      return getMessageResponseObject(value['status'], value['response']);
+    } else {
+      return Future.error(Error);
+    }
+  }, onError: (e) {
+    return Future.error(e);
+  });
+  return response;
+}
+
+Future<MessageResponse> getUserLogoutGoodbye(bool voice) async {
+  var response = await APIManager.getUserLogoutGoodbye({
+    'voice': voice,
+  }).then((value) {
+    if (value['status'] != 400) {
+      return getMessageResponseObject(value['status'], value['response']);
+    } else {
+      return Future.error(Error);
+    }
+  }, onError: (e) {
+    return Future.error(e);
+  });
+  return response;
+}
