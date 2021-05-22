@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -7,8 +5,8 @@ import 'package:va_client/models/login_response.dart';
 import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/message_response.dart';
 import 'package:va_client/models/navigation.dart';
-import 'package:va_client/screens/home_screen.dart';
 import 'package:va_client/services/message_service.dart';
+import 'package:va_client/services/user_service.dart';
 import 'package:va_client/utils/functions.dart';
 
 // Actions

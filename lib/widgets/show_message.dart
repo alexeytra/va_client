@@ -39,6 +39,7 @@ class ShowMessage extends StatelessWidget {
                   message.message,
                   style: TextStyle(
                       color: Colors.black,
+                      height: 1.4,
                       fontSize: 16.0,
                       fontWeight: FontWeight.normal),
                 )
