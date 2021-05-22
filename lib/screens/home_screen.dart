@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _speechToText = stt.SpeechToText();
     // getAudioIntro();
-
   }
 
   @override
@@ -134,7 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Visibility(
                 visible: viewModel.listening, child: _showUserQuestion()),
             Visibility(
-                visible: viewModel.areOptionalQuestions,
+                visible: viewModel.areOptionalQuestions &&
+                    !viewModel.listening &&
+                    viewModel.messages.length > 1,
                 // visible: viewModel.areOptionalQuestions && viewModel.messages.length != 1,
                 child: ShowOptionalQuestions(
                   viewModel: viewModel,

@@ -34,8 +34,7 @@ class AppState {
 
   AppState.initialState()
       : messages = List.unmodifiable(<Message>[]),
-        optionalQuestions =
-            List.unmodifiable(<String>['👍', '👎', 'Привет', 'Как дела']),
+        optionalQuestions = List.unmodifiable(<String>[]),
         listening = false,
         visibilityFloating = true,
         visibilityInput = false,
