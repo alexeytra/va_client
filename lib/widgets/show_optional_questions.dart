@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:va_client/models/message_model.dart';
 import 'package:va_client/models/view_model.dart';
-import 'package:va_client/utils/functions.dart';
 
 class ShowOptionalQuestions extends StatelessWidget {
   final ViewModel viewModel;

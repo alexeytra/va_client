@@ -6,8 +6,6 @@ import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 import 'package:va_client/utils/functions.dart';
 
-import 'home_screen.dart';
-
 class AccountScreen extends StatefulWidget {
   @override
   _AccountScreenState createState() => _AccountScreenState();
