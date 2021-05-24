@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:va_client/models/message_properties.dart';
+import 'package:va_client/models/message/message_properties.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'message_model.g.dart';

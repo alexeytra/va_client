@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:va_client/models/auth_data.dart';
-import 'package:va_client/models/login_response.dart';
-import 'package:va_client/models/message_model.dart';
-import 'package:va_client/models/message_response.dart';
+import 'package:va_client/models/user/auth_data.dart';
+import 'package:va_client/models/user/login_response.dart';
+import 'package:va_client/models/message/message_model.dart';
+import 'package:va_client/models/message/message_response.dart';
 import 'package:va_client/models/settings_model.dart';
 
 void getAudioAnswer(String url) async {
@@ -43,6 +43,15 @@ LoginResponse getLoginResponseObject(int statusCode, dynamic response) {
     return LoginResponse.fromJson(response);
   } else {
     return null;
+  }
+}
+
+String getUserInfoObject(int statusCode, dynamic response) {
+  if (statusCode == 200) {
+    print(response);
+    return '';
+  } else {
+    return '';
   }
 }
 

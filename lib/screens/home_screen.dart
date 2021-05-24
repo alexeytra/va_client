@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:va_client/models/message_model.dart';
+import 'package:va_client/models/message/message_model.dart';
 import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/actions.dart';

@@ -42,18 +42,20 @@ class APIManager {
   }
 
   static Future<dynamic> getUserInfo(Map param) async {
-    return get(param, 'http://esstu.ru/lk/api/v1/student/getInfo');
+    return get(param, 'https://esstu.ru/mlk/api/v1/student/getInfo');
   }
 
   static dynamic post(Map param, String endpoint) async {
     var responseJson;
     try {
-      final response =
-          await http.post(endpoint.contains('https') ? api : api + endpoint,
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonEncode(param));
+      final response = await http.post(
+          (endpoint.contains('https') || endpoint.contains('http'))
+              ? endpoint
+              : api + endpoint,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(param));
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
@@ -66,11 +68,14 @@ class APIManager {
   static dynamic get(Map param, String endpoint) async {
     var responseJson;
     try {
-      final response = await http
-          .get(endpoint.contains('https') ? api : api + endpoint, headers: {
-        HttpHeaders.authorizationHeader: 'Bearer ' + param['accessToken'],
-        HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
-      });
+      final response = await http.get(
+          (endpoint.contains('https') || endpoint.contains('http'))
+              ? endpoint
+              : api + endpoint,
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ' + param['accessToken'],
+            HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+          });
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');

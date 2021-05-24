@@ -1,5 +1,5 @@
-import 'package:va_client/models/message_model.dart';
-import 'package:va_client/models/message_properties.dart';
+import 'package:va_client/models/message/message_model.dart';
+import 'package:va_client/models/message/message_properties.dart';
 
 class MessageResponse {
   final Message message;

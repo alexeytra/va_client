@@ -4,6 +4,7 @@ import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
+import 'package:va_client/services/user_service.dart';
 import 'package:va_client/utils/functions.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -12,14 +13,25 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+
+  var info = '';
+  var loadingInfo = true;
+
   @override
   Widget build(BuildContext context) {
+
     return StoreConnector<AppState, ViewModel>(
       distinct: true,
       onDispose: (store) {
         if (!store.state.isLogin) {
           store.dispatch(getLogoutGoodbyeAction());
         }
+      },
+      onInit: (store) {
+        getUserInfo(store.state.user.accessToken).then((value) => setState(() {
+          info = value;
+          loadingInfo = false;
+        }));
       },
       converter: (store) => ViewModel.create(store),
       builder: (context, ViewModel viewModel) => Scaffold(
@@ -48,6 +60,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ? viewModel.loginResponse.getName()
                   : '', style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center,),
               SizedBox(height: 70.0),
+              Text(info),
               TextButton(
                   onPressed: () {
                     _showUserLogoutConfirm(viewModel);

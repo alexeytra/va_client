@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:va_client/models/message_model.dart';
+import 'package:va_client/models/message/message_model.dart';
 
 class ShowMessage extends StatelessWidget {
   final bool isMe;

@@ -1,5 +1,5 @@
-import 'package:va_client/models/login_response.dart';
-import 'package:va_client/models/message_response.dart';
+import 'package:va_client/models/user/login_response.dart';
+import 'package:va_client/models/message/message_response.dart';
 import 'package:va_client/utils/api_manager.dart';
 import 'package:va_client/utils/functions.dart';
 
@@ -81,11 +81,11 @@ Future<MessageResponse> getUserLogoutGoodbye(bool voice) async {
 }
 
 Future<String> getUserInfo(String accessToken) async {
-  var response = await APIManager.getUserLogoutGoodbye({
+  var response = await APIManager.getUserInfo({
     'accessToken': accessToken,
   }).then((value) {
     if (value['status'] != 400) {
-      return getMessageResponseObject(value['status'], value['response']);
+      return getUserInfoObject(value['status'], value['response']);
     } else {
       return Future.error(Error);
     }

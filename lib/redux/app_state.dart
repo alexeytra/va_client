@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:va_client/models/login_response.dart';
-import 'package:va_client/models/message_model.dart';
+import 'package:va_client/models/user/login_response.dart';
+import 'package:va_client/models/message/message_model.dart';
 
 @immutable
 class AppState {

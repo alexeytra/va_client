@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
-import 'package:va_client/models/login_response.dart';
+import 'package:va_client/models/user/login_response.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
 
-import 'message_model.dart';
+import 'message/message_model.dart';
 
 class ViewModel {
   final bool listening;
