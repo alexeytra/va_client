@@ -80,12 +80,12 @@ Future<MessageResponse> getUserLogoutGoodbye(bool voice) async {
   return response;
 }
 
-Future<String> getUserInfo(String accessToken) async {
+Future<String> getStudentUserInfo(String accessToken) async {
   var response = await APIManager.getUserInfo({
     'accessToken': accessToken,
   }).then((value) {
     if (value['status'] != 400) {
-      return getUserInfoObject(value['status'], value['response']);
+      return 'Студент ' + value['response']['courseNumber'] + ' курса, ' + value['response']['facultyName'];
     } else {
       return Future.error(Error);
     }
