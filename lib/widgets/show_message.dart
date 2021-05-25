@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:va_client/models/message/message_model.dart';
 
 class ShowMessage extends StatelessWidget {
@@ -8,9 +9,7 @@ class ShowMessage extends StatelessWidget {
   final typing;
 
   ShowMessage(
-      {@required this.isMe,
-      @required this.message,
-      @required this.typing});
+      {@required this.isMe, @required this.message, @required this.typing});
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +33,20 @@ class ShowMessage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          !(typing && message.iconTyping != null)
-              ? Text(
+          if (!(typing && message.iconTyping != null)) Text(
                   message.message,
                   style: TextStyle(
                       color: Colors.black,
                       height: 1.4,
                       fontSize: 16.0,
                       fontWeight: FontWeight.normal),
+                ) else Container(
+            width: 50,
+                  child: SpinKitThreeBounce(
+                    color: Colors.black,
+                    size: 18.0,
+                  ),
                 )
-              : Image.asset(
-                  message.iconTyping,
-                  width: 50.0,
-                  height: 20.0,
-                ),
         ],
       ),
     );
