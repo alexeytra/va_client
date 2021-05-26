@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:va_client/models/message_model.dart';
+import 'package:va_client/models/message/message_model.dart';
 import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/actions.dart';
@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _speechToText = stt.SpeechToText();
     // getAudioIntro();
-
   }
 
   @override
@@ -134,7 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Visibility(
                 visible: viewModel.listening, child: _showUserQuestion()),
             Visibility(
-                visible: viewModel.areOptionalQuestions,
+                visible: viewModel.areOptionalQuestions &&
+                    !viewModel.listening &&
+                    viewModel.messages.length > 1,
                 // visible: viewModel.areOptionalQuestions && viewModel.messages.length != 1,
                 child: ShowOptionalQuestions(
                   viewModel: viewModel,
@@ -158,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Center(
             child: Text(
           _text,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, ),
         )),
       ),
     );

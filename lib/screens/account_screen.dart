@@ -4,9 +4,9 @@ import 'package:va_client/models/navigation.dart';
 import 'package:va_client/models/view_model.dart';
 import 'package:va_client/redux/actions.dart';
 import 'package:va_client/redux/app_state.dart';
+import 'package:va_client/services/user_service.dart';
 import 'package:va_client/utils/functions.dart';
-
-import 'home_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -14,6 +14,9 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  var info = '';
+  var loadingInfo = true;
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
@@ -22,6 +25,13 @@ class _AccountScreenState extends State<AccountScreen> {
         if (!store.state.isLogin) {
           store.dispatch(getLogoutGoodbyeAction());
         }
+      },
+      onInit: (store) {
+        getStudentUserInfo(store.state.user.accessToken)
+            .then((value) => setState(() {
+                  info = value;
+                  loadingInfo = false;
+                }));
       },
       converter: (store) => ViewModel.create(store),
       builder: (context, ViewModel viewModel) => Scaffold(
@@ -44,17 +54,42 @@ class _AccountScreenState extends State<AccountScreen> {
                           ? viewModel.loginResponse.getInitials()
                           : '',
                       style: TextStyle(
-                          fontSize: 50.0, fontWeight: FontWeight.bold, color: Colors.white))),
+                          fontSize: 50.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white))),
               SizedBox(height: 70.0),
-              Text(viewModel.loginResponse != null
-                  ? viewModel.loginResponse.getName()
-                  : '', style: TextStyle(fontSize: 20.0), textAlign: TextAlign.center,),
+              Text(
+                viewModel.loginResponse != null
+                    ? viewModel.loginResponse.getName()
+                    : '',
+                style: TextStyle(fontSize: 20.0),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 14.0),
+              Visibility(
+                child: SpinKitFadingCircle(
+                  color: Colors.orangeAccent,
+                  size: 35.0,
+                ),
+                visible: loadingInfo,
+              ),
+              Visibility(
+                child: Text(
+                  info,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                visible: !loadingInfo,
+              ),
               SizedBox(height: 70.0),
               TextButton(
                   onPressed: () {
                     _showUserLogoutConfirm(viewModel);
                   },
-                  child: Text('Выйти', style: TextStyle(fontSize: 20.0),))
+                  child: Text(
+                    'Выйти',
+                    style: TextStyle(fontSize: 20.0),
+                  ))
             ],
           ),
         ),

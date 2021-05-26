@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:va_client/models/login_response.dart';
-import 'package:va_client/models/message_model.dart';
+import 'package:va_client/models/user/login_response.dart';
+import 'package:va_client/models/message/message_model.dart';
 
 @immutable
 class AppState {
@@ -34,8 +34,7 @@ class AppState {
 
   AppState.initialState()
       : messages = List.unmodifiable(<Message>[]),
-        optionalQuestions =
-            List.unmodifiable(<String>['👍', '👎', 'Привет', 'Как дела']),
+        optionalQuestions = List.unmodifiable(<String>[]),
         listening = false,
         visibilityFloating = true,
         visibilityInput = false,

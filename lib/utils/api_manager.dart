@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'dart:async';
 
 class APIManager {
-  static final api = 'http://127.0.0.1:5000';
+  static final api = 'http://192.168.0.101:5000';
 
   static Future<dynamic> sendQuestionApi(Map param) async {
     return post(param, '/va/api/v1/question/text');
@@ -41,14 +41,41 @@ class APIManager {
     return post(param, '/va/api/v1/user/logout');
   }
 
+  static Future<dynamic> getUserInfo(Map param) async {
+    return get(param, 'https://esstu.ru/mlk/api/v1/student/getInfo');
+  }
+
   static dynamic post(Map param, String endpoint) async {
     var responseJson;
     try {
-      final response = await http.post(api + endpoint,
+      final response = await http.post(
+          (endpoint.contains('https') || endpoint.contains('http'))
+              ? endpoint
+              : api + endpoint,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(param));
+      responseJson = _response(response);
+    } on SocketException {
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      print('Error ' + e.toString());
+    }
+    return responseJson;
+  }
+
+  static dynamic get(Map param, String endpoint) async {
+    var responseJson;
+    try {
+      final response = await http.get(
+          (endpoint.contains('https') || endpoint.contains('http'))
+              ? endpoint
+              : api + endpoint,
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ' + param['accessToken'],
+            HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+          });
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
