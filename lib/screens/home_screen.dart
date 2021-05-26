@@ -159,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Center(
             child: Text(
           _text,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, ),
         )),
       ),
     );
