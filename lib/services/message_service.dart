@@ -24,9 +24,9 @@ Future<MessageResponse> sendQuestion(
 }
 
 Future<MessageResponse> sendWrongAnswer(
-    List<Message> messages, String userId) async {
+    List<Message> messages, String userId, bool voice) async {
   var response = await APIManager.sendWrongAnswerApi(
-      {'messages': messages, 'userId': userId}).then((value) {
+      {'messages': messages, 'userId': userId, 'voice': voice}).then((value) {
     return getMessageResponseObject(value['status'], value['response']);
   }, onError: (e) {
     return Future.error(e);

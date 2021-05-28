@@ -115,8 +115,9 @@ ThunkAction sendWrongAnswerAction(
     List<Message> messages, String msg, String userId) {
   return (Store store) async {
     await Future(() async {
+      var settings = await getSettingsFromSharedPreferences();
       store.dispatch(SendQuestionRequestAction(msg));
-      await sendWrongAnswer(messages, userId).then((response) {
+      await sendWrongAnswer(messages, userId, settings.voice).then((response) {
         store.dispatch(SendQuestionCompletedAction(response));
         getAudioAnswer(response.audioAnswer);
       }, onError: (error) {

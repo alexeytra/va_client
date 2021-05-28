@@ -29,6 +29,7 @@ void audioPlayerHandler(AudioPlayerState value) => null;
 
 MessageResponse getMessageResponseObject(int statusCode, dynamic response) {
   if (statusCode == 200) {
+    print('response >>> ' + response.toString());
     return MessageResponse.fromJson(response);
   } else {
     return MessageResponse(
