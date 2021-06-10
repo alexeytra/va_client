@@ -11,9 +11,9 @@ Future<MessageResponse> sendQuestion(
     'question': question.take(10).join(' '),
     'voice': voice,
     'generateAnswer': generateAnswer,
-    'userId': user?.userId ?? '',
-    'token': user?.accessToken ?? '',
-    'userType': user?.userType ?? ''
+    'user_id': user?.userId ?? '',
+    'user_token': user?.accessToken ?? '',
+    'user_type': user?.userType ?? ''
   }).then((value) {
     return getMessageResponseObject(value['status'], value['response']);
   }, onError: (error) {
